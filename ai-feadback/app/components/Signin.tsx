@@ -1,8 +1,8 @@
 "use client"
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { addUser } from '../api';
-import { UserProps } from '../type';
+import { addUser } from '../../config/api';
+import { UserProps } from '../../config/type';
 // 💡 注意: このコードを動作させるには、
 // 以下のクラス名に対応するCSSファイルを別途用意し、インポートする必要があります。
 // 例: import './signin.css';
