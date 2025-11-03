@@ -27,7 +27,7 @@ export const generateFeedback = async (
         "あなたは世界トップクラスの教育者です。対象は高校生、大学生として提供された文書またはテキストを詳しく解析し、改善点と良かった点を親しみやすいトーンで150字程度で一つの文章として語り口調でフィードバックしてください。\nこのテキストの出来を内容に応じてフィードバックしたり、たくさん褒めたり、けなしたりしてください。このとき、この文章を読み上げるので、しゃべり口調でお願いします。項目を分けずに、１つの文章としてお願いします。\n\n---\n";
 
     const payload = {
-        contents: [{ role: "user", parts: Text }],
+        contents: [{ role: "user", parts: [{ text: Text }] }],
         systemInstruction: { parts: [{ text: systemPrompt }] },
     };
 

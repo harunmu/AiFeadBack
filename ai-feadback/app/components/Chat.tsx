@@ -5,17 +5,54 @@ import React, { ChangeEvent, useState } from 'react';
 import { synthesizeVoice } from '../utils/voicevox'; 
 import { CHARACTER_OPTIONS, SPEAKER_IDS } from '../config/voiceSettings';
 import AudioPlayer from './AudioPlayer';
+import { generateFeedback } from '../utils/geminiUtils';
 
 const Chat = () => { 
 
   const [inputText, setInputText] = useState<string>('');
-  const [audioData, setAudioData] = useState<Blob>();
+  // const [feedbackText, setFeedbackText] = useState<string | null>(null);
+  const [audioData, setAudioData] = useState<Blob>()
+  const [audioBlob, setAudioBlob] = useState<Blob | undefined>(undefined);
   const [speakerId, setSpeakerId] = useState<number>(SPEAKER_IDS.ZUNDAMON);
   const [isProcessing, setIsProcessing] = useState<boolean>(false); 
-  // ★ 新しいchat_logステートを追加
   const [chatLog, setChatLog] = useState<string[]>([]); 
 
-  // ★ 統合された実行関数 ★
+  // GeminiAPI関連
+  const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || ""; 
+  const API_MODEL = "gemini-2.5-flash-preview-09-2025";
+  const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+
+  // geminiAPIによるフィードバック作成関数
+  const handleTextFeedback = async (currentText: string) => {
+
+    try {
+        const feedbackText = await generateFeedback(
+            currentText, 
+            GEMINI_API_KEY, 
+            API_URL
+        );
+
+        return feedbackText;
+
+    } catch (error) {
+        console.error("フィードバック取得エラー:", error);
+    }
+  };
+
+  // 音声ファイル作成関数
+  const CreateAudioBlob = async(feedbackText: string) => {
+
+    try {
+        const audioBlob: Blob | undefined = await synthesizeVoice(feedbackText, speakerId);
+        return audioBlob
+        
+    } catch (error) {
+        console.error("音声合成エラー:", error);
+        alert("音声合成に失敗しました。");
+    }
+  }
+
+  // 実行関数 
   const handleSynthesis = async () => {
     if (!inputText || isProcessing) return; 
 
@@ -23,18 +60,33 @@ const Chat = () => {
     setIsProcessing(true); // 処理開始
     setAudioData(undefined); // 古い再生データをクリア
 
-    // utils.tsの統合関数を呼び出し
-    const audioBlob = await synthesizeVoice(currentText, speakerId);
+    // テキストをログに表示
+    setChatLog(prevLog => [...prevLog, currentText]); 
+    // textareaをクリア
+    setInputText('')
 
-    if (audioBlob) {
-      // 成功した場合: 
-      // 1. 音声データセット（自動再生がトリガーされる）
-      setAudioData(audioBlob);
-      // 2. chatLogにテキストを追加 ★
-      setChatLog(prevLog => [...prevLog, currentText]); 
-      // 3. textareaをクリア
-      setInputText('')
-    }
+    // フィードバック作成
+
+    const feedbackText = await handleTextFeedback(currentText);
+
+    console.log(feedbackText)
+
+
+    //音声データ作成
+    if (feedbackText) {
+
+
+      // フィードバックをログに表示
+      setChatLog(prevLog => [...prevLog, feedbackText]); 
+
+      // audioBlobを作成
+      const audioBlob = await CreateAudioBlob(feedbackText)
+
+      if (audioBlob) {
+        // 1. 音声データセット
+        setAudioData(audioBlob);
+      }
+    };
     
     setIsProcessing(false); // 処理終了
   };
@@ -93,7 +145,7 @@ const Chat = () => {
           onClick={handleSynthesis}
           disabled={!inputText || isProcessing} 
         >
-          {isProcessing ? '処理中...' : '再生'}
+          {isProcessing ? '処理中...' : '実行'}
         </button>
       </div>
 
