@@ -1,20 +1,22 @@
 "use client"
 
 import React, { useState, useCallback, useMemo } from 'react';
+import { addUser } from '../api';
+import { UserProps } from '../type';
 // 💡 注意: このコードを動作させるには、
 // 以下のクラス名に対応するCSSファイルを別途用意し、インポートする必要があります。
 // 例: import './signin.css';
 
 // キャラクターとそのIDの定義
 interface Character {
-  id: string;
+  id: number;
   name: string;
 }
 
 const CHARACTERS: Character[] = [
-  { id: 'char_01', name: 'キャラクター1' },
-  { id: 'char_02', name: 'キャラクター2' },
-  { id: 'char_03', name: 'キャラクター3' },
+  { id: 1, name: 'キャラクター1' },
+  { id: 2, name: 'キャラクター2' },
+  { id: 3, name: 'キャラクター3' },
 ];
 
 /**
@@ -37,7 +39,7 @@ const SignInForm: React.FC = () => {
   // ステートの定義
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [selectedCharId, setSelectedCharId] = useState<string>(CHARACTERS[0].id); // デフォルトで最初のキャラクターを選択
+  const [selectedCharId, setSelectedCharId] = useState<number>(CHARACTERS[0].id); // デフォルトで最初のキャラクターを選択
 
   // エラーメッセージを格納
   const passwordError = useMemo(() => validatePassword(password), [password]);
@@ -48,25 +50,31 @@ const SignInForm: React.FC = () => {
   }, [username, passwordError]);
 
   // サインイン処理
-  const handleSignIn = useCallback((event: React.FormEvent) => {
-    event.preventDefault(); // フォームのデフォルト送信を防止
+const handleSignIn = useCallback(async (event: React.FormEvent) => {
+    event.preventDefault(); 
 
     if (!isFormValid) {
-      alert('入力内容を確認してください。');
       return;
     }
 
-    // 認証APIへの送信などの実際の処理
-    console.log('--- サインイン情報 ---');
-    console.log(`ユーザーネーム: ${username}`);
-    console.log(`パスワード: ${password} (送信時はハッシュ化などの処理が必要です)`);
-    console.log(`選択されたキャラクターID: ${selectedCharId}`);
-    console.log('サインイン処理を完了しました。（実際はAPI通信が必要です）');
-    
-    // フォームをリセット（任意）
-    // setUsername('');
-    // setPassword('');
+    // addUserに渡すデータオブジェクトを作成 (UserProps型に準拠)
+    const userData: UserProps = {
+      user_name: username, // 'user_naem' を 'user_name' に修正します
+      password: password,
+      character_id: selectedCharId,
+    };
 
+    // try {
+      // ユーザー登録（またはサインイン）処理を実行
+      const result = await addUser(userData);
+      
+    //   if (result.success) {
+    //     // 成功時のフォームリセットはここでは行いません
+    //     console.log('success')
+    //   } 
+    // } catch (error) {
+    //   console.error('サインイン処理中に予期せぬエラーが発生:', error);
+    // }
   }, [username, password, selectedCharId, isFormValid]);
 
   // クラス名の動的な結合

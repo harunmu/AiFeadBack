@@ -1,6 +1,8 @@
 // ai-feedback/api.ts
 // ai-feedback/api.ts
-import { supabase } from "./config/supabaseClient";
+import { supabase } from "../config/supabaseClient";
+
+import { ChatlogProps, UserProps } from "./type";
 
 /**
  * 指定した1日分のprogress_logsを取得する関数
@@ -32,15 +34,22 @@ export const getProgressLogs = async (targetDate: string) => {
  * 新しいチャットログを追加する関数
  * @param progressData - { chat_id, user_id, chatlog }
  */
-export const addProgressLog = async (progressData: {
-  chat_id: string;
-  user_id: string;
-  chatlog: any; // JSON形式で保存
-}) => {
+export const addProgressLog = async (progressData: ChatlogProps) => {
   const { data, error } = await supabase.from("progress_logs").insert([progressData]);
 
   if (error) {
     console.error("Error adding progress_log:", error.message);
+    return null;
+  }
+
+  return data?.[0];
+};
+
+export const addUser = async (UserData: UserProps) => {
+  const { data, error } = await supabase.from("users").insert([UserData]);
+
+  if (error) {
+    console.error("Error adding users:", error.message);
     return null;
   }
 
