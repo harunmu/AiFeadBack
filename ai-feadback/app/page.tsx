@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Calender from "./components/Calender";
+import Calendar from "./components/Calendar";
 
 export default function Home() {
   return (
-    < Calender />
+    < Calendar />
   );
 }
