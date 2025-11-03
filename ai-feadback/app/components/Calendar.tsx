@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 // react-datepickerとCSSをインポート
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import '../../app/style/date-picker.css';
+
 
 const Calendar = () => {
   // 選択された日付を保持するState (Dateオブジェクト)
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
   // DatePickerで日付が選択されたときに実行されるハンドラ
   const handleDateChange = (date: Date | null) => {
@@ -26,13 +28,11 @@ const Calendar = () => {
   // 例: "2025/11/04" -> "2025-11-04" に変換されます
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-50">
+    <div className="flex flex-col items-center justify-top mt-15 ">
       
-      <h1 className="text-3xl font-bold mb-8 text-gray-800">📅 UIカレンダーによる日付選択</h1>
       
       {/* 1. カレンダー表示エリア */}
-      <div className="p-6 bg-white shadow-xl rounded-lg border border-gray-200">
-        <h2 className="text-xl font-semibold mb-3 text-gray-700">カレンダー表</h2>
+      <div className="w-full max-w-xl bg-white shadow-xl rounded-lg ">
         
         {/* DatePickerコンポーネント: inline属性でカレンダーを常時表示 */}
         <DatePicker
@@ -46,9 +46,8 @@ const Calendar = () => {
 
       {/* 2. 選択された日付の表示エリア */}
       <div className="mt-10 p-6 w-full max-w-md bg-indigo-50 shadow-lg rounded-lg text-center">
-        <h2 className="text-xl font-semibold mb-3 text-indigo-800">✅ 選択された日付 (YYYY-MM-DD)</h2>
         
-        <p className="text-3xl font-extrabold text-indigo-600">
+        <p className="text-xl">
           {formattedDate}
         </p>
       </div>
