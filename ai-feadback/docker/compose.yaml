@@ -1,0 +1,7 @@
+services:
+  voicevox_engine:
+    container_name: ai-feadback
+    image: voicevox/voicevox_engine:cpu-ubuntu20.04-latest
+    ports:
+      - '50021:50021'
+    restart: unless-stopped
