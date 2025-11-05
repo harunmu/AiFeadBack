@@ -1,15 +1,14 @@
-import Image from "next/image";
-import Start from "./components/Start";
-import Calendar from "./components/Calendar";
-import Login from "./components/Login";
+// app/page.tsx
+"use client";
 
+import { useRouter } from "next/navigation";
+import Start from './components/Start';
 
-export default function Home() {
+export default function StartPage() {
+  const router = useRouter();
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white text-black font-sans">
-       <Login />
-       <Start />
-    </main>
+    <Start />
   );
 }
+

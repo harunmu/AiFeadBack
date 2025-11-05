@@ -87,6 +87,12 @@ const Login = () => {
         >
           ログイン
         </button>
+        <button
+        onClick={() => router.push("/")}
+        className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+      >
+        ← 戻る
+      </button>
       </div>
 
       {/* 結果表示 */}
