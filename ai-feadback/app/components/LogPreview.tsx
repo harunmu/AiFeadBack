@@ -4,7 +4,11 @@ import React, { useState } from 'react'
 import Calendar from './Calendar'
 import Log from './Log'
 
-const LogPreview = () => {
+interface LogPreviewProps {
+  onLogClick: (chatlog: string[]) => void;
+}
+
+const LogPreview = ({ onLogClick }: LogPreviewProps) => {
   // 選択された日付を状態管理（YYYY-MM-DD形式）
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     // 初期値として今日の日付をYYYY-MM-DD形式で設定
@@ -19,7 +23,7 @@ const LogPreview = () => {
   return (
     <div>
         <Calendar onDateChange={setSelectedDate} />
-        <Log selectedDate={selectedDate} />
+        <Log selectedDate={selectedDate} onLogClick={onLogClick} />
     </div>
   )
 }

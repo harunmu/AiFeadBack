@@ -6,9 +6,10 @@ import { ChatlogProps } from '@/config/type'
 
 interface LogProps {
   selectedDate: string;
+  onLogClick: (chatlog: string[]) => void;
 }
 
-const Log = ({ selectedDate }: LogProps) => {
+const Log = ({ selectedDate, onLogClick }: LogProps) => {
   const [logs, setLogs] = useState<ChatlogProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,7 +64,8 @@ const Log = ({ selectedDate }: LogProps) => {
           {logs.map((log) => (
             <div
               key={log.chat_id}
-              className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => onLogClick(log.chatlog)}
             >
               <div className="mt-2">
                 <div className="bg-gray-50 p-3 rounded border border-gray-100">
@@ -72,7 +74,7 @@ const Log = ({ selectedDate }: LogProps) => {
                   </p>
                 </div>
               </div>
-              
+
             </div>
           ))}
         </div>
