@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import Image from "next/image";
-import LogPreview from "./LogPreview";
-import Chat from "./Chat";
+import LogPreview from "./Log/LogPreview";
+import Chat from "./Chat/Chat";
 import MenuBar from './MenuBar';
 
 type CurrentView = 'log' | 'chat';

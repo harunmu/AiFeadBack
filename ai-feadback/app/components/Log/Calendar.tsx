@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../../app/style/date-picker.css';
+import '../../../app/style/date-picker.css';
 
 interface CalendarProps {
   onDateChange: (formattedDate: string) => void;
