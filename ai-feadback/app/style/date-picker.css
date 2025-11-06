@@ -1,0 +1,85 @@
+/* -------------------------------------- */
+/* 1. カレンダーのルート要素を調整 (ルート要素) */
+/* -------------------------------------- */
+.react-datepicker {
+
+  width: 100%;
+  border: none !important;
+  font-size: 1rem; 
+  border-radius: 12px;
+  padding: 0.5rem; 
+}
+
+.react-datepicker__month-container {
+    width: 100%;
+}
+
+/* -------------------------------------- */
+/* 2. 月のヘッダー部分のパディングとフォントを調整 */
+/* -------------------------------------- */
+.react-datepicker__header {
+  padding-top: 1rem;
+}
+
+/* 月と年の表示部分のフォントサイズ調整 */
+.react-datepicker__current-month {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem; 
+  font-weight: bold;
+}
+
+/* -------------------------------------- */
+/* 3. 日付のセル（タップターゲット）のサイズ調整 */
+/* -------------------------------------- */
+
+/* 日付の曜日名、日付セル、時間名のサイズを調整 */
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  width: 13%; 
+  line-height: 2.5rem;
+  margin: 0.1rem; /* セル間のマージンを詰めて、横幅をコンパクトに */
+  border-radius: 50%; /* 日付セルを丸くするとスマホで美しく見えます */
+}
+
+/* 曜日を太字に変更 */
+.react-datepicker__day-name {
+  font-weight: bold;
+}
+
+/* 対象月外の日付を薄く表示 */
+.react-datepicker__day--outside-month {
+    opacity: 0.4;
+}
+
+/* 選択された日付のスタイルも忘れずに調整 */
+.react-datepicker__day--selected {
+  /* 選択時のスタイルがセルサイズに合うように */
+  background-color: #4f46e5; /* 例: Indigo-600 */
+  color: white;
+}
+
+/* -------------------------------------- */
+/* 4. 月表示全体の調整 (週間のコンテナ) */
+/* -------------------------------------- */
+.react-datepicker__month {
+  margin: 0; /* 不要なマージンを削除し、横幅を有効活用 */
+}
+
+/* 月送りの矢印ボタン全体を対象 */
+.react-datepicker__navigation {
+
+  top: 6%; /* ヘッダーの50%の位置に基準点を設定 */
+  transform: translateY(-10%); /* 矢印自身の高さの半分だけ上に戻し、垂直中央寄せを実現 */
+  
+
+  font-weight: bold !important;
+}
+
+.react-datepicker__navigation--previous {
+    left: 1rem;
+}
+
+.react-datepicker__navigation--next {
+    right: 1rem;
+}

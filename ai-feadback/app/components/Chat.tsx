@@ -1,24 +1,35 @@
 "use client"
 
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 // utilsファイルから関数と型をインポート
-import { synthesizeVoice } from '../utils/voicevox'; 
+import { synthesizeVoice } from '../utils/voicevox';
 import { CHARACTER_OPTIONS, SPEAKER_IDS } from '../config/voiceSettings';
 import AudioPlayer from './AudioPlayer';
 import { generateFeedback } from '../utils/geminiUtils';
 
-const Chat = () => { 
+interface ChatProps {
+  initialChatLog?: string[];
+}
+
+const Chat = ({ initialChatLog = [] }: ChatProps) => {
 
   const [inputText, setInputText] = useState<string>('');
   // const [feedbackText, setFeedbackText] = useState<string | null>(null);
   const [audioData, setAudioData] = useState<Blob>()
   const [audioBlob, setAudioBlob] = useState<Blob | undefined>(undefined);
   const [speakerId, setSpeakerId] = useState<number>(SPEAKER_IDS.ZUNDAMON);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false); 
-  const [chatLog, setChatLog] = useState<string[]>([]); 
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [chatLog, setChatLog] = useState<string[]>(initialChatLog);
+
+  // initialChatLogが変更された時にchatLogを更新
+  useEffect(() => {
+    if (initialChatLog.length > 0) {
+      setChatLog(initialChatLog);
+    }
+  }, [initialChatLog]);
 
   // GeminiAPI関連
-  const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || ""; 
+  const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
   const API_MODEL = "gemini-2.5-flash-preview-09-2025";
   const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
