@@ -177,7 +177,7 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
               </p>
             ))}
           </div>
-         <SaveChatButton chatLog={chatLog} />
+         <SaveChatButton chatlog={chatLog} />
         </div>
       )}
 

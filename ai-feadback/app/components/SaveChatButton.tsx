@@ -3,34 +3,37 @@
 import React, { useState } from "react";
 import { supabase } from "@/config/supabaseClient"; 
 import type { PostgrestError } from "@supabase/supabase-js";
-interface SaveChatButtonProps {
-  chatLog: string[];
+import { ChatlogProps } from "@/config/type";
+import { addProgressLog } from "@/config/api";
+
+interface saveButtonProps{
+  chatlog: string[];
 }
 
-const SaveChatButton: React.FC<SaveChatButtonProps> = ({ chatLog }) => {
+
+const SaveChatButton: React.FC<saveButtonProps> = ({ chatlog }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   const handleSave = async () => {
-    if (chatLog.length === 0) {
+    if (chatlog.length === 0) {
       setMessage("⚠️ 保存できるチャットログがありません。");
       return;
     }
+
+    const progressData : ChatlogProps = {
+      chat_id: "12",
+      user_id: "1",
+      chatlog: chatlog,
+      created_at: new Date().toISOString()
+    };
 
     setIsSaving(true);
     setMessage(null);
 
     try {
       // Supabase テーブル名は chat_logs と仮定
-      const { error } = await supabase.from("chat_logs").insert([
-        {
-          created_at: new Date().toISOString(),
-          log_data: chatLog, // 配列をそのままJSONとして保存
-        },
-      ]);
-
-      if (error) throw error;
-
+      await addProgressLog(progressData)
       setMessage("✅ ChatLogをSupabaseに保存しました！");
     } catch (err: any) {
       console.error("保存エラー:", err);
