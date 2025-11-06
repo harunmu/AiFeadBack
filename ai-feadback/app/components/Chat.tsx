@@ -2,6 +2,7 @@
 
 import React, { ChangeEvent, useState, useEffect } from 'react';
 // utilsファイルから関数と型をインポート
+import SaveChatButton from "./SaveChatButton"; 
 import { synthesizeVoice } from '../utils/voicevox';
 import { CHARACTER_OPTIONS, SPEAKER_IDS } from '../config/voiceSettings';
 import AudioPlayer from './AudioPlayer';
@@ -176,6 +177,7 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
               </p>
             ))}
           </div>
+         <SaveChatButton chatLog={chatLog} />
         </div>
       )}
 
