@@ -53,9 +53,9 @@ const Login = () => {
       character_id: data.character_id,
       user_name: userName,
       }));
-      console.log('ログイン成功:', { user_id: data.user_id, character_id: data.character_id });
-      // 必要に応じてリダイレクトなどの処理を追加
-      // router.push('/dashboard'); // 例: ダッシュボードページへリダイレクト
+
+      // チャット画面に移動
+      router.push('/chat'); 
 
     } catch (err) {
       console.error('ログイン中にエラー:', err);

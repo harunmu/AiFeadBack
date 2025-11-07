@@ -29,6 +29,12 @@ const Start: React.FC = () => {
         >
           サインイン
         </button>
+        <button
+          onClick={() => router.push("/chat")}
+          className="bg-gray-300 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition"
+        >
+          テスト
+        </button>
       </div>
     </main>
   );

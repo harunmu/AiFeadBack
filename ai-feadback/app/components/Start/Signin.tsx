@@ -199,7 +199,7 @@ const SignInForm: React.FC = () => {
               
               <button
                 type="button"
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/chat")}
                 className="w-full py-3 px-4 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all duration-200"
               >
                 ← 戻る
