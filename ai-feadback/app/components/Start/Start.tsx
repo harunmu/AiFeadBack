@@ -3,8 +3,6 @@ import React from 'react';
 // 💡 重要な点: 相対パス '../' は、Start.tsxの親ディレクトリを参照します。
 // Signin.tsxが Start.tsxと同じディレクトリにある場合は './Signin' に変更してください。
 // ts(2307)エラー対策として、ここでは拡張子を省略しています。（Next.js/Reactの標準的な書き方）
-import SignInForm from './Signin';
-import Login from './Login';
 import { useRouter } from 'next/navigation';
 
 /**

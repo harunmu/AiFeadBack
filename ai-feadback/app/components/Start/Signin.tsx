@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import React, { useState, useCallback, useMemo } from 'react';
-import { addUser } from '../../config/api';
-import { UserProps } from '../../config/type';
+import { addUser } from '../../../config/api';
+import { UserProps } from '../../../config/type';
 
 // キャラクターとそのIDの定義
 interface Character {
@@ -216,5 +216,4 @@ const SignInForm: React.FC = () => {
     </div>
   );
 };
-
 export default SignInForm;

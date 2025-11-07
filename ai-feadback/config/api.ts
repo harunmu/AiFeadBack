@@ -1,5 +1,3 @@
-// ai-feedback/api.ts
-// ai-feedback/api.ts
 import { supabase } from "./supabaseClient";
 
 import { ChatlogProps, UserProps } from "./type";
