@@ -5,6 +5,7 @@ import { supabase } from "@/config/supabaseClient";
 import type { PostgrestError } from "@supabase/supabase-js";
 import { ChatlogProps } from "@/config/type";
 import { addProgressLog } from "@/config/api";
+import { v4 as uuidv4 } from 'uuid';
 
 interface saveButtonProps{
   chatlog: string[];
@@ -21,9 +22,11 @@ const SaveChatButton: React.FC<saveButtonProps> = ({ chatlog }) => {
       return;
     }
 
+    const UserID = localStorage.getItem("user_id")!;
+
     const progressData : ChatlogProps = {
-      chat_id: "12",
-      user_id: "1",
+      chat_id: uuidv4(),
+      user_id: uuidv4(),
       chatlog: chatlog,
       created_at: new Date().toISOString()
     };

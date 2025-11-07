@@ -65,10 +65,12 @@ const SignInForm: React.FC = () => {
     // try {
       // ユーザー登録（またはサインイン）処理を実行
       const result = await addUser(userData);
+
+      router.push("/chat")
       
-    //   if (result.success) {
-    //     console.log('success')
-    //   } 
+      // if (result.success) {
+      //   console.log('success')
+      // } 
     // } catch (error) {
     //   console.error('サインイン処理中に予期せぬエラーが発生:', error);
     // }
@@ -199,7 +201,7 @@ const SignInForm: React.FC = () => {
               
               <button
                 type="button"
-                onClick={() => router.push("/chat")}
+                onClick={() => router.push("/")}
                 className="w-full py-3 px-4 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all duration-200"
               >
                 ← 戻る
