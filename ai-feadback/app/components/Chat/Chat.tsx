@@ -2,11 +2,13 @@
 
 import React, { ChangeEvent, useState, useEffect } from 'react';
 // utilsファイルから関数と型をインポート
-import SaveChatButton from "./SaveChatButton"; 
+import SaveChatButton from "./SaveChatButton";
 import { synthesizeVoice } from '../../utils/voicevox';
 import AudioPlayer from './AudioPlayer';
 import { generateFeedback } from '../../utils/geminiUtils';
 import { UserData } from '@/config/type';
+import { CHARACTER_OPTIONS } from '@/app/config/voiceSettings';
+import Image from 'next/image';
 
 interface ChatProps {
   initialChatLog?: string[];
@@ -127,64 +129,82 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
   // ユーザー情報を格納
   const userData : UserData | null = getUserDataFromLocalStorage();
 
-  if(userData){
-    const user_id = userData.user_id
-    const user_name = userData.user_name
-    const character_id = userData.character_id
-  }
+  // キャラクター情報を取得
+  const currentCharacter = userData
+    ? CHARACTER_OPTIONS.find(char => char.id === userData.character_id)
+    : null;
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4 space-y-8'>
-      
-      {/* 読み上げたい文章を入力セクション */}
-      <div className='max-w-3xl mx-auto w-full text-center p-6 bg-white shadow-lg rounded-xl'>
-        
-        <textarea 
-          className='w-full h-24 p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200 resize-none'
-          value={inputText}
-          onChange={
-            (e: ChangeEvent<HTMLTextAreaElement>) => {
-                setInputText(e.target.value);
-                setAudioData(undefined); 
+    <div className='relative flex items-center justify-center min-h-screen bg-gray-50 p-4'>
+
+      {/* メインコンテンツエリア（中央配置） */}
+      <div className='flex flex-col items-center space-y-8 w-full max-w-3xl z-(-1)'>
+
+        {/* 読み上げたい文章を入力セクション */}
+        <div className='w-full text-center p-6 bg-white shadow-lg rounded-xl'>
+          
+          <textarea 
+            className='w-full h-24 p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200 resize-none'
+            value={inputText}
+            onChange={
+              (e: ChangeEvent<HTMLTextAreaElement>) => {
+                  setInputText(e.target.value);
+                  setAudioData(undefined); 
+              }
             }
-          }
-          placeholder={`文章を入力してください`}
-          disabled={isProcessing}
-        />
-      </div>
-
-      {/* 実行ボタンセクション */}
-      <div className='max-w-3xl mx-auto w-full text-center p-6 bg-white shadow-lg rounded-xl'>
-        <button 
-          className='w-full h-20 text-xl font-bold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 transition duration-200 disabled:opacity-50'
-          onClick={handleSynthesis}
-          disabled={!inputText || isProcessing} 
-        >
-          {isProcessing ? '処理中...' : '実行'}
-        </button>
-      </div>
-
-      {/* ★ chat_log 表示セクションの追加 ★ */}
-        <div className='max-w-3xl mx-auto w-full p-6 bg-white shadow-lg rounded-xl'>
-          <h2 className='text-2xl font-semibold mb-4 text-gray-700'>テキストログ</h2>
-          <div className='max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3 space-y-2'>
-            {/* ログを新しい順に表示するため reverse() を使用し、mapの前に適用 */}
-            {chatLog.slice().map((log, index) => (
-              <p 
-                key={chatLog.length - 1 - index} 
-                className='p-2 bg-gray-50 border-l-4 border-indigo-500 text-gray-800 text-left rounded'
-              >
-                <span className='font-bold text-sm text-indigo-600 mr-2'>[{chatLog.length - index}]</span>
-                {log}
-              </p>
-            ))}
-          </div>
-         <SaveChatButton user_id={userData!.user_id} chatlog={chatLog} />
+            placeholder={`文章を入力してください`}
+            disabled={isProcessing}
+          />
         </div>
-      
 
-      <AudioPlayer audioData={audioData} isProcessing={isProcessing} />
+        {/* 実行ボタンセクション */}
+        <div className='w-full text-center p-6 bg-white shadow-lg rounded-xl'>
+          <button 
+            className='w-full h-20 text-xl font-bold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 transition duration-200 disabled:opacity-50'
+            onClick={handleSynthesis}
+            disabled={!inputText || isProcessing} 
+          >
+            {isProcessing ? '処理中...' : '実行'}
+          </button>
+        </div>
 
+        {/* ★ chat_log 表示セクションの追加 ★ */}
+          <div className='w-full p-6 bg-white shadow-lg rounded-xl'>
+            <h2 className='text-2xl font-semibold mb-4 text-gray-700'>テキストログ</h2>
+            <div className='max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3 space-y-2'>
+              {/* ログを新しい順に表示するため reverse() を使用し、mapの前に適用 */}
+              {chatLog.slice().map((log, index) => (
+                <p 
+                  key={chatLog.length - 1 - index} 
+                  className='p-2 bg-gray-50 border-l-4 border-indigo-500 text-gray-800 text-left rounded'
+                >
+                  <span className='font-bold text-sm text-indigo-600 mr-2'>[{chatLog.length - index}]</span>
+                  {log}
+                </p>
+              ))}
+            </div>
+            <SaveChatButton user_id={userData!.user_id} chatlog={chatLog} />
+          </div>
+        
+
+          <AudioPlayer audioData={audioData} isProcessing={isProcessing} />
+      </div>
+
+      {/* キャラクター立ち絵セクション（画面右側に固定配置） */}
+      {currentCharacter && (
+        <div className='hidden lg:block absolute right-8 top-1/2 -translate-y-1/2'>
+          <div className='flex flex-col items-center'>
+            <Image
+              src={currentCharacter.image}
+              alt={currentCharacter.name}
+              width={500}
+              height={600}
+              className='object-contain'
+              priority
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

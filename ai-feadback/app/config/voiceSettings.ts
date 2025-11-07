@@ -14,7 +14,7 @@ export const AUDIO_SETTINGS = {
 };
 
 export const CHARACTER_OPTIONS = [
-  { id: SPEAKER_IDS.ZUNDAMON, name: 'ずんだもん' },
-  { id: SPEAKER_IDS.WHITECUL, name: '春日部つむぎ' },
-  { id: SPEAKER_IDS.MEIMEIHIMARI, name: '冥鳴ひまり' },
+  { id: SPEAKER_IDS.ZUNDAMON, name: 'ずんだもん', image: '/ずんだもん立ち絵素材2_0000.png' },
+  { id: SPEAKER_IDS.WHITECUL, name: '春日部つむぎ', image: '/春日部つむぎ立ち絵素材_0000.png' },
+  { id: SPEAKER_IDS.MEIMEIHIMARI, name: '冥鳴ひまり', image: '/冥鳴ひまり立ち絵素材ver_0000.png' },
 ];
