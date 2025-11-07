@@ -7,6 +7,13 @@
 
 import fs from 'fs';
 import path from 'path';
+import { createClient } from '@supabase/supabase-js';
+
+// Supabaseクライアントの初期化（環境変数から読み込む）
+const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -24,6 +31,7 @@ const fileToBase64 = (file: File): Promise<string> => {
             // ];
 
 export const generateFeedback = async (
+    userId: string,
     Text: string,
     GEMINI_API_KEY: string,
     API_URL: string
@@ -31,9 +39,31 @@ export const generateFeedback = async (
     const promptpath = path.join(process.cwd(), 'prompts', 'geminiPrompt.txt');
     const systemPrompt = fs.readFileSync(promptpath, 'utf-8');
 
+    //supabaseから最新のprogress_logを取得
+    const { data, error } = await supabase
+        .from('progress_logs')
+        .select('chatlog')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(5); // 直近5件を取得（必要に応じて調整）
+    if (error) {
+        console.error("Error fetching progress_logs for Gemini prompt:", error.message);
+        return null;
+    }
+
+    // チャットログ配列を結合してテキストに
+    const allLogs = data
+        ?.map(entry => `【チャットログ】\n${entry.chatlog.join('\n')}`)
+        .join('\n------\n') || '（まだ記録がありません）';
+
+
+    // ④ systemPrompt の {{chatlog}} を置換
+    const fullPrompt = systemPrompt
+    .replace('{{chatlog}}', allLogs)
+    .replace('{{input}}', Text);
+
     const payload = {
-        contents: [{ role: "user", parts: [{ text: Text }] }],
-        systemInstruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
     };
 
     const maxRetries = 3;

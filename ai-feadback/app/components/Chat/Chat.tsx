@@ -44,6 +44,7 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
 
     try {
         const feedbackText = await generateFeedback(
+            userData!.user_id,
             currentText, 
             GEMINI_API_KEY, 
             API_URL
