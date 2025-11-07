@@ -11,9 +11,8 @@ export interface UserProps{
     character_id: number;
 }
 
-// export interface ProgressLog {
-//     chat_id: string;
-//     user_id: string;
-//     chatlog: any;
-//     created_at: string;
-// }
+export interface UserData{
+    user_id: string;
+    character_id: string;
+    user_name: string;
+}

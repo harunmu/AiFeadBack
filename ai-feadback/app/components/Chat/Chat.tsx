@@ -7,10 +7,15 @@ import { synthesizeVoice } from '../../utils/voicevox';
 import { CHARACTER_OPTIONS, SPEAKER_IDS } from '../../config/voiceSettings';
 import AudioPlayer from './AudioPlayer';
 import { generateFeedback } from '../../utils/geminiUtils';
+import { getUserDataFromLocalStorage } from '@/app/utils/localStorage';
+import { UserData } from '@/config/type';
 
 interface ChatProps {
   initialChatLog?: string[];
 }
+
+const userData : UserData | null = getUserDataFromLocalStorage();
+
 
 const Chat = ({ initialChatLog = [] }: ChatProps) => {
 
@@ -162,7 +167,6 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
       </div>
 
       {/* ★ chat_log 表示セクションの追加 ★ */}
-      {chatLog.length > 0 && (
         <div className='max-w-3xl mx-auto w-full p-6 bg-white shadow-lg rounded-xl'>
           <h2 className='text-2xl font-semibold mb-4 text-gray-700'>テキストログ</h2>
           <div className='max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3 space-y-2'>
@@ -177,9 +181,9 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
               </p>
             ))}
           </div>
-         <SaveChatButton chatlog={chatLog} />
+         <SaveChatButton user_id={userData!.user_id} chatlog={chatLog} />
         </div>
-      )}
+      
 
       <AudioPlayer audioData={audioData} isProcessing={isProcessing} />
 

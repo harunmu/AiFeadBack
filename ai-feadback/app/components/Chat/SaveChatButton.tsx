@@ -8,11 +8,12 @@ import { addProgressLog } from "@/config/api";
 import { v4 as uuidv4 } from 'uuid';
 
 interface saveButtonProps{
+  user_id: string;
   chatlog: string[];
 }
 
 
-const SaveChatButton: React.FC<saveButtonProps> = ({ chatlog }) => {
+const SaveChatButton: React.FC<saveButtonProps> = ({ user_id ,chatlog }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -22,11 +23,9 @@ const SaveChatButton: React.FC<saveButtonProps> = ({ chatlog }) => {
       return;
     }
 
-    const UserID = localStorage.getItem("user_id")!;
-
     const progressData : ChatlogProps = {
       chat_id: uuidv4(),
-      user_id: uuidv4(),
+      user_id: user_id,
       chatlog: chatlog,
       created_at: new Date().toISOString()
     };
