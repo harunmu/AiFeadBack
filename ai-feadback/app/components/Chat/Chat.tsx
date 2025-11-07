@@ -195,7 +195,7 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
         <div className='hidden lg:block absolute right-8 top-1/2 -translate-y-1/2'>
           <div className='flex flex-col items-center'>
             <Image
-              src={currentCharacter.image}
+              src={`/${currentCharacter.name}.png`}
               alt={currentCharacter.name}
               width={500}
               height={600}
