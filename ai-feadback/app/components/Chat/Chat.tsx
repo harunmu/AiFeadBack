@@ -4,18 +4,13 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 // utilsファイルから関数と型をインポート
 import SaveChatButton from "./SaveChatButton"; 
 import { synthesizeVoice } from '../../utils/voicevox';
-import { CHARACTER_OPTIONS, SPEAKER_IDS } from '../../config/voiceSettings';
 import AudioPlayer from './AudioPlayer';
 import { generateFeedback } from '../../utils/geminiUtils';
-import { getUserDataFromLocalStorage } from '@/app/utils/localStorage';
 import { UserData } from '@/config/type';
 
 interface ChatProps {
   initialChatLog?: string[];
 }
-
-const userData : UserData | null = getUserDataFromLocalStorage();
-
 
 const Chat = ({ initialChatLog = [] }: ChatProps) => {
 
@@ -23,7 +18,6 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
   // const [feedbackText, setFeedbackText] = useState<string | null>(null);
   const [audioData, setAudioData] = useState<Blob>()
   const [audioBlob, setAudioBlob] = useState<Blob | undefined>(undefined);
-  const [speakerId, setSpeakerId] = useState<number>(SPEAKER_IDS.ZUNDAMON);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [chatLog, setChatLog] = useState<string[]>(initialChatLog);
 
@@ -60,9 +54,14 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
   const CreateAudioBlob = async(feedbackText: string) => {
 
     try {
-        const audioBlob: Blob | undefined = await synthesizeVoice(feedbackText, speakerId);
-        return audioBlob
-        
+        if (!userData) {
+          return null; 
+        }
+
+        const speaker_id = userData.character_id
+        const audioBlob: Blob | undefined = await synthesizeVoice(feedbackText, speaker_id);
+
+        return audioBlob    
     } catch (error) {
         console.error("音声合成エラー:", error);
         alert("音声合成に失敗しました。");
@@ -83,16 +82,10 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
     setInputText('')
 
     // フィードバック作成
-
     const feedbackText = await handleTextFeedback(currentText);
-
-    console.log(feedbackText)
-
 
     //音声データ作成
     if (feedbackText) {
-
-
       // フィードバックをログに表示
       setChatLog(prevLog => [...prevLog, feedbackText]); 
 
@@ -108,38 +101,43 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
     setIsProcessing(false); // 処理終了
   };
 
-  // キャラクター選択時のボタンのスタイル制御
-  const getSpeakerButtonClass = (id: number) => {
-    const baseClasses = 'px-4 py-2 font-semibold rounded-lg transition duration-150';
-    if (speakerId === id) {
-      return `${baseClasses} bg-blue-500 text-white shadow-md`;
+  // ローカルストレージからユーザー情報を取得
+  const getUserDataFromLocalStorage = (): UserData | null => {
+    const userJson = localStorage.getItem("user");
+
+    if (!userJson) {
+      return null; 
     }
-    return `${baseClasses} bg-gray-200 text-gray-700 hover:bg-blue-100`;
+
+    try {
+      const userData = JSON.parse(userJson) as UserData;
+      
+      if (userData.user_id && userData.character_id && userData.user_name) {
+          return userData; 
+      }
+      
+      return null; 
+
+    } catch (e) {
+      console.error("Failed to parse user data from localStorage:", e);
+      return null;
+    }
   };
 
+  // ユーザー情報を格納
+  const userData : UserData | null = getUserDataFromLocalStorage();
+
+  if(userData){
+    const user_id = userData.user_id
+    const user_name = userData.user_name
+    const character_id = userData.character_id
+  }
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4 space-y-8'>
       
       {/* 読み上げたい文章を入力セクション */}
       <div className='max-w-3xl mx-auto w-full text-center p-6 bg-white shadow-lg rounded-xl'>
-        
-        {/* キャラクター選択ボタン群 */}
-        <div className='flex justify-around space-x-2 mb-6'>
-          {CHARACTER_OPTIONS.map((char) => (
-            <button
-              key={char.id}
-              className={getSpeakerButtonClass(char.id)}
-              onClick={() => {
-                setSpeakerId(char.id);
-                setAudioData(undefined); 
-              }}
-              disabled={isProcessing}
-            >
-              {char.name}
-            </button>
-          ))}
-        </div>
         
         <textarea 
           className='w-full h-24 p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200 resize-none'
