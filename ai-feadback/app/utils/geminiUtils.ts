@@ -3,6 +3,11 @@
  * Gemini API呼び出しに関する処理を集約
  */
 
+'use server';
+
+import fs from 'fs';
+import path from 'path';
+
 const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -23,8 +28,8 @@ export const generateFeedback = async (
     GEMINI_API_KEY: string,
     API_URL: string
 ): Promise<string | null> => {
-    const systemPrompt =
-        "あなたは世界トップクラスの教育者です。対象は高校生、大学生として提供された文書またはテキストを詳しく解析し、改善点と良かった点を親しみやすいトーンで150字程度で一つの文章として語り口調でフィードバックしてください。\nこのテキストの出来を内容に応じてフィードバックしたり、たくさん褒めたり、けなしたりしてください。このとき、この文章を読み上げるので、しゃべり口調でお願いします。項目を分けずに、１つの文章としてお願いします。\n\n---\n";
+    const promptpath = path.join(process.cwd(), 'prompts', 'geminiPrompt.txt');
+    const systemPrompt = fs.readFileSync(promptpath, 'utf-8');
 
     const payload = {
         contents: [{ role: "user", parts: [{ text: Text }] }],
