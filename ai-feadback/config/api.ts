@@ -2,11 +2,10 @@ import { supabase } from "./supabaseClient";
 
 import { ChatlogProps, UserProps } from "./type";
 
-/**
- * 指定した1日分のprogress_logsを取得する関数
- * @param {string} targetDate - "YYYY-MM-DD" 形式（例: "2025-10-31"）
- */
 export const getProgressLogs = async (targetDate: string, userId: string) => {
+//指定した1日分のprogress_logsを取得する関数
+
+export const getProgressLogs = async (targetDate: string) => {
   // 翌日を計算
   const nextDay = new Date(targetDate);
   nextDay.setDate(nextDay.getDate() + 1);
@@ -29,10 +28,8 @@ export const getProgressLogs = async (targetDate: string, userId: string) => {
   return data;
 };
 
-/**
- * 新しいチャットログを追加する関数
- * @param progressData - { chat_id, user_id, chatlog }
- */
+//* ログを追加
+
 export const addProgressLog = async (progressData: ChatlogProps) => {
   const { data, error } = await supabase.from("progress_logs").insert([progressData]);
 
@@ -44,6 +41,8 @@ export const addProgressLog = async (progressData: ChatlogProps) => {
   return data?.[0];
 };
 
+// ユーザー登録
+
 export const addUser = async (UserData: UserProps) => {
   const { data, error } = await supabase.from("users").insert([UserData]);
 
@@ -53,4 +52,19 @@ export const addUser = async (UserData: UserProps) => {
   }
 
   return data?.[0];
+};
+
+// ユーザーのキャラクターIDを更新する関数
+export const updateUserCharacter = async (userId: string, characterId: number) => {
+  const { data, error } = await supabase
+    .from("users")
+    .update({ character_id: characterId })
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Error updating user character:", error.message);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data };
 };

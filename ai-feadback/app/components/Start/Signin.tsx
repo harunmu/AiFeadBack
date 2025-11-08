@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import React, { useState, useCallback, useMemo } from 'react';
 import { addUser } from '../../../config/api';
 import { UserProps } from '../../../config/type';
-import { CHARACTER_OPTIONS, SPEAKER_IDS } from "@/app/config/voiceSettings";
 import { v4 as uuidv4 } from 'uuid';
+import CharacterSelection from './CharacterSelection';
 
 
 /**
@@ -26,9 +26,10 @@ const validatePassword = (password: string): string | null => {
 
 const SignInForm: React.FC = () => {
   const router = useRouter();
+  const [step, setStep] = useState<1 | 2>(1); // 1: ユーザー情報入力, 2: キャラクター選択
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [selectedCharId, setSelectedCharId] = useState<number>(CHARACTER_OPTIONS[0].id);
+  const [selectedCharId, setSelectedCharId] = useState<number | null>(null);
 
   // エラーメッセージを格納
   const passwordError = useMemo(() => validatePassword(password), [password]);
@@ -38,45 +39,52 @@ const SignInForm: React.FC = () => {
     return username.trim().length > 0 && passwordError === null;
   }, [username, passwordError]);
 
-  const handleSignIn = useCallback(async (event: React.FormEvent) => {
-    event.preventDefault(); 
-
-    if (!isFormValid) {
-      return;
+  // ステップ1: ユーザー情報入力後に次へ進む
+  const handleNext = useCallback(() => {
+    if (isFormValid) {
+      setStep(2);
     }
+  }, [isFormValid]);
+
+  // ステップ2: キャラクター選択後にサインイン完了
+  const handleCharacterSelect = useCallback(async (characterId: number) => {
+    setSelectedCharId(characterId);
 
     // addUserに渡すデータオブジェクトを作成 (UserProps型に準拠)
     const userData: UserProps = {
       user_id: uuidv4(),
       user_name: username,
       password: password,
-      character_id: selectedCharId,
+      character_id: characterId,
     };
 
     localStorage.setItem("user", JSON.stringify({
       user_id: userData.user_id,
       user_name: userData.user_name,
       character_id: userData.character_id,
-      }));
+    }));
 
-    // try {
-      // ユーザー登録（またはサインイン）処理を実行
-      const result = await addUser(userData);
+    // ユーザー登録（またはサインイン）処理を実行
+    const result = await addUser(userData);
 
-      router.push("/chat")
-      
-      // if (result.success) {
-      //   console.log('success')
-      // } 
-    // } catch (error) {
-    //   console.error('サインイン処理中に予期せぬエラーが発生:', error);
-    // }
-  }, [username, password, selectedCharId, isFormValid]);
+    router.push("/chat");
+  }, [username, password, router]);
 
+  // キャラクター選択から戻る
+  const handleBackToStep1 = useCallback(() => {
+    setStep(1);
+  }, []);
+
+  // ステップ2: キャラクター選択画面
+  if (step === 2) {
+    return <CharacterSelection onSelect={handleCharacterSelect} onBack={handleBackToStep1} />;
+  }
+
+  // ステップ1: ユーザー情報入力画面
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+      <div className="w-full min-w-xl">
+        <div className="bg-white rounded-2xl shadow-xl py-16 px-32 space-y-6">
           <div className="text-center space-y-2">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mb-2">
               <span className="text-3xl">✨</span>
@@ -142,41 +150,10 @@ const SignInForm: React.FC = () => {
               )}
             </div>
 
-            <div className="space-y-3">
-              <label className="block text-sm font-semibold text-gray-700">
-                キャラクター選択
-              </label>
-              <div className="grid grid-cols-3 gap-3">
-                {CHARACTER_OPTIONS.map((char) => (
-                  <button
-                    key={char.id}
-                    type="button"
-                    onClick={() => setSelectedCharId(char.id)}
-                    className={`relative p-4 rounded-xl border-2 transition-all duration-200 ${
-                      selectedCharId === char.id
-                        ? 'border-indigo-500 bg-indigo-50 shadow-md scale-105'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    <div className="flex items-center justify-center">
-                      <span className="text-sm font-medium text-gray-700 text-center">
-                        {char.name}
-                      </span>
-                    </div>
-                    {selectedCharId === char.id && (
-                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center">
-                        <span className="text-white text-xs">✓</span>
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             <div className="space-y-3 pt-2">
-              <button 
+              <button
                 type="button"
-                onClick={handleSignIn}
+                onClick={handleNext}
                 disabled={!isFormValid}
                 className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 ${
                   isFormValid
@@ -184,7 +161,7 @@ const SignInForm: React.FC = () => {
                     : 'bg-gray-300 cursor-not-allowed'
                 }`}
               >
-                {isFormValid ? 'サインイン' : '入力内容を確認してください'}
+                {isFormValid ? '次へ →' : '入力内容を確認してください'}
               </button>
               
               <button
