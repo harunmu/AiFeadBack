@@ -57,7 +57,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full max-w-md bg-white/90 backdrop-blur-md 
+    <div className="w-full max-w-xl bg-white/90 backdrop-blur-md
                     rounded-3xl shadow-2xl py-12 px-10 border-2 border-green-200">
       <div className="text-center space-y-2 mb-5">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-2 shadow-md">
