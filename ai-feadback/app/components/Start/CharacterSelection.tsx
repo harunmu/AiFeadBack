@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { CHARACTER_OPTIONS } from '@/app/config/voiceSettings'
 import { PlayIcon, Volume2 } from 'lucide-react'
-import { Play } from 'next/font/google'
 
 interface CharacterSelectionProps {
   onSelect: (characterId: number) => void
@@ -45,14 +44,15 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect, onBac
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-200 to-lime-200 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl">
-        <div className="bg-white rounded-2xl shadow-xl p-10 space-y-8">
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-10 space-y-8 border-2 border-green-200">
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mb-2">
-              <span className="text-3xl">🎭</span>
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full mb-2 shadow-md">
+              {/* 枝豆アイコンに変更 */}
+              <span className="text-3xl">🫘</span>
             </div>
-            <h2 className="text-3xl font-bold text-gray-800">キャラクター選択</h2>
+            <h2 className="text-3xl font-bold text-green-700">キャラクター選択</h2>
             <p className="text-gray-500 text-sm">お好きなキャラクターを選択してください</p>
           </div>
 
@@ -62,8 +62,8 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect, onBac
                 key={character.id}
                 className={`relative cursor-pointer border-2 rounded-xl p-6 transition-all duration-200 ${
                   selectedCharacterID === character.id
-                    ? 'border-indigo-500 bg-indigo-50 shadow-lg scale-105'
-                    : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
+                    ? 'border-green-500 bg-green-50 shadow-lg scale-105'
+                    : 'border-gray-200 hover:border-green-300 hover:bg-gray-50'
                 }`}
                 onClick={() => setSelectedCharacterID(character.id)}
               >
@@ -104,7 +104,7 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect, onBac
 
                   {/* 選択チェックマーク */}
                   {selectedCharacterID === character.id && (
-                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center shadow-lg">
+                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
                       <span className="text-white text-lg">✓</span>
                     </div>
                   )}
@@ -117,9 +117,9 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect, onBac
             <button
               onClick={handleSelect}
               disabled={selectedCharacterID === null}
-              className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 ${
+              className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 ${
                 selectedCharacterID !== null
-                  ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+                  ? 'bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
                   : 'bg-gray-300 cursor-not-allowed'
               }`}
             >
@@ -128,7 +128,7 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect, onBac
 
             <button
               onClick={onBack}
-              className="w-full py-3 px-4 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all duration-200"
+              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-gradient-to-r from-lime-400 to-green-600 hover:from-lime-500 hover:to-green-700 shadow-md hover:shadow-lg transition-all duration-200"
             >
               ← 戻る
             </button>

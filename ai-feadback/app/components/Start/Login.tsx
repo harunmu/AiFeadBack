@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useState, memo } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-// Supabaseクライアントの初期化（環境変数から読み込む）
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -27,7 +26,6 @@ const Login = () => {
     }
 
     try {
-      // usersテーブルから一致するユーザーを検索
       const { data, error } = await supabase
         .from('users')
         .select('user_id, password, character_id')
@@ -39,24 +37,19 @@ const Login = () => {
         return;
       }
 
-      // パスワード照合（平文比較）
       if (data.password !== password) {
         setError('パスワードが違います');
         return;
       }
 
-      // ログイン成功
       setUserInfo({ user_id: data.user_id, character_id: data.character_id });
-      // ログイン情報を localStorage に保存
       localStorage.setItem("user", JSON.stringify({
-      user_id: data.user_id,
-      character_id: data.character_id,
-      user_name: userName,
+        user_id: data.user_id,
+        character_id: data.character_id,
+        user_name: userName,
       }));
 
-      // チャット画面に移動
       router.push('/chat'); 
-
     } catch (err) {
       console.error('ログイン中にエラー:', err);
       setError('ログインに失敗しました');
@@ -64,44 +57,58 @@ const Login = () => {
   };
 
   return (
-    <div className="border p-4 rounded-lg shadow mt-6">
-      <h2 className="text-lg font-bold mb-3">Login</h2>
-      <div className="flex flex-col gap-2">
+    <div className="w-full max-w-md bg-white/90 backdrop-blur-md 
+                    rounded-3xl shadow-2xl p-8 border-2 border-green-200">
+      <h2 className="text-3xl font-bold text-center text-green-700 mb-6">ログイン</h2>
+      
+      <div className="flex flex-col gap-4">
         <input
           type="text"
           placeholder="ユーザー名"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
-          className="border rounded p-2"
+          className="border-2 border-green-300 rounded-xl p-3 
+                     focus:outline-none focus:ring-2 focus:ring-green-400 
+                     focus:border-green-400 transition-all duration-200"
         />
         <input
           type="password"
           placeholder="パスワード"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border rounded p-2"
+          className="border-2 border-green-300 rounded-xl p-3 
+                     focus:outline-none focus:ring-2 focus:ring-green-400 
+                     focus:border-green-400 transition-all duration-200"
         />
+
         <button
           onClick={handleLogin}
-          className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          className="py-3 font-bold text-white 
+                     bg-gradient-to-r from-green-400 to-emerald-500 
+                     rounded-xl shadow-lg hover:shadow-xl hover:scale-105 
+                     transition-all duration-200"
         >
           ログイン
         </button>
         <button
-        onClick={() => router.push("/")}
-        className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-      >
-        ← 戻る
-      </button>
+          onClick={() => router.push("/")}
+          className="py-3 font-bold text-white 
+                     bg-gradient-to-r from-lime-400 to-green-600 
+                     rounded-xl shadow-lg hover:shadow-xl hover:scale-105 
+                     transition-all duration-200"
+        >
+          ← 戻る
+        </button>
       </div>
 
-      {/* 結果表示 */}
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+      {error && (
+        <p className="text-red-500 mt-4 text-center font-semibold">❌ {error}</p>
+      )}
       {userInfo && (
-        <div className="mt-3 bg-green-100 p-2 rounded">
-          <p>✅ ログイン成功！</p>
-          <p>user_id: {userInfo.user_id}</p>
-          <p>character_id: {userInfo.character_id}</p>
+        <div className="mt-4 bg-green-100 p-3 rounded-xl text-center">
+          <p className="font-bold text-green-700">✅ ログイン成功！</p>
+          <p className="text-sm text-gray-700">user_id: {userInfo.user_id}</p>
+          <p className="text-sm text-gray-700">character_id: {userInfo.character_id}</p>
         </div>
       )}
     </div>
