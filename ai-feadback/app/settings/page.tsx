@@ -160,19 +160,49 @@ const SettingsPage = () => {
                   ? `${ZUNDAMON_THEME_COLORS.accentBorder} ${ZUNDAMON_THEME_COLORS.cardBg} ${ZUNDAMON_THEME_COLORS.accentShadow} scale-105 ring-4 ring-offset-2 ring-lime-200` // 選択時
                   : `${ZUNDAMON_THEME_COLORS.primaryBorder} ${ZUNDAMON_THEME_COLORS.cardBg} shadow-md hover:shadow-lg hover:border-lime-300` // 非選択時
                 }`}
-              onClick={() => handleCharacterChange(character.id)}
-            >
-              <div className="flex flex-col items-center space-y-4">
-                {/* キャラクター画像 */}
-                <div className="w-48 h-56 relative overflow-hidden rounded-lg"> {/* 画像の丸み */}
-                  <Image
-                    src={`/${character.name}.png`}
-                    alt={character.name}
-                    layout="fill"
-                    objectFit="cover"
-                    objectPosition="center top" // 画像の上部を中央に
-                    className="filter drop-shadow-md"
-                  />
+                onClick={() => setSelectedCharacterId(character.id)}
+              >
+                <div className="flex flex-col items-center space-y-4">
+                  {/* キャラクター画像（上部にフォーカス） */}
+                  <div className="w-48 h-56 relative overflow-hidden">
+                    <Image
+                      src={`/img/${character.name}.png`}
+                      alt={character.name}
+                      width={400}
+                      height={600}
+                      className="object-cover object-top"
+                      style={{ objectPosition: '50% 10%' }}
+                    />
+                  </div>
+
+                  {/* キャラクター名 */}
+                  <h3 className="text-lg font-semibold text-gray-800 text-center">
+                    {character.name}
+                  </h3>
+
+                  {/* 音声プレビューボタン */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      playVoicePreview(character.id, character.name)
+                    }}
+                    disabled={isPlaying === character.id}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                      isPlaying === character.id
+                        ? 'bg-green-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Volume2 className={`w-4 h-4 ${isPlaying === character.id ? 'animate-pulse' : ''}`} />
+                    <PlayIcon />
+                  </button>
+
+                  {/* 選択チェックマーク */}
+                  {selectedCharacterId === character.id && (
+                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center shadow-lg">
+                      <span className="text-white text-lg">✓</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* キャラクター名 */}
