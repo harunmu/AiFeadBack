@@ -6,7 +6,7 @@ import { ChatlogProps, UserProps } from "./type";
  * 指定した1日分のprogress_logsを取得する関数
  * @param {string} targetDate - "YYYY-MM-DD" 形式（例: "2025-10-31"）
  */
-export const getProgressLogs = async (targetDate: string) => {
+export const getProgressLogs = async (targetDate: string, userId: string) => {
   // 翌日を計算
   const nextDay = new Date(targetDate);
   nextDay.setDate(nextDay.getDate() + 1);
@@ -16,6 +16,7 @@ export const getProgressLogs = async (targetDate: string) => {
   const { data, error } = await supabase
     .from("progress_logs")
     .select("*")
+    .eq("user_id", userId)
     .gte("created_at", `${targetDate}T00:00:00`)
     .lt("created_at", `${nextDateStr}T00:00:00`)
     .order("created_at", { ascending: true });

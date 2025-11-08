@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { getProgressLogs } from '@/config/api'
-import { ChatlogProps } from '@/config/type'
+import { ChatlogProps, UserData } from '@/config/type'
 
 interface LogProps {
   selectedDate: string;
@@ -14,15 +14,43 @@ const Log = ({ selectedDate, onLogClick }: LogProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+    // ローカルストレージからユーザー情報を取得
+    const getUserDataFromLocalStorage = (): UserData | null => {
+      const userJson = localStorage.getItem("user");
+  
+      if (!userJson) {
+        return null; 
+      }
+  
+      try {
+        const userData = JSON.parse(userJson) as UserData;
+        
+        if (userData.user_id && userData.character_id && userData.user_name) {
+            return userData; 
+        }
+        
+        return null; 
+  
+      } catch (e) {
+        console.error("Failed to parse user data from localStorage:", e);
+        return null;
+      }
+    };
+
+  const userData = getUserDataFromLocalStorage();
+  const userId = userData ? userData.user_id : null;
+
+
   useEffect(() => {
     const fetchLogs = async () => {
-      if (!selectedDate) return;
+
+      if (!selectedDate || !userId) return;
 
       setLoading(true);
       setError(null);
 
       try {
-        const data = await getProgressLogs(selectedDate);
+        const data = await getProgressLogs(selectedDate, userId);
         setLogs(data || []);
       } catch (err) {
         console.error('ログの取得に失敗しました:', err);
@@ -33,7 +61,7 @@ const Log = ({ selectedDate, onLogClick }: LogProps) => {
     };
 
     fetchLogs();
-  }, [selectedDate]); // selectedDateが変更されたときに再取得
+  }, [selectedDate, userId]); // selectedDateが変更されたときに再取得
 
   return (
     <div className="mt-8 p-6 max-w-4xl mx-auto">
