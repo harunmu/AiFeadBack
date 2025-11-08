@@ -2,10 +2,9 @@ import { supabase } from "./supabaseClient";
 
 import { ChatlogProps, UserProps } from "./type";
 
-export const getProgressLogs = async (targetDate: string, userId: string) => {
 //指定した1日分のprogress_logsを取得する関数
 
-export const getProgressLogs = async (targetDate: string) => {
+export const getProgressLogs = async (targetDate: string, userId: string) => {
   // 翌日を計算
   const nextDay = new Date(targetDate);
   nextDay.setDate(nextDay.getDate() + 1);
