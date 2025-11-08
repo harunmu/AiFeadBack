@@ -210,31 +210,9 @@ const SettingsPage = () => {
                   {character.name}
                 </h3>
 
-                {/* 音声プレビューボタン */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation(); // 親のonClickイベントが発火しないようにする
-                    playVoicePreview(character.id, character.name);
-                  }}
-                  disabled={isPlaying === character.id}
-                  className={`flex items-center justify-center gap-2 px-5 py-2 rounded-full font-semibold transition-all duration-200 shadow-md
-                    ${isPlaying === character.id
-                      ? `${ZUNDAMON_THEME_COLORS.accent} text-white animate-pulse` // 再生中
-                      : `bg-green-100 ${ZUNDAMON_THEME_COLORS.iconColor} hover:bg-green-200` // 非再生中
-                    }`}
-                >
-                  <CirclePlay />
-                  {isPlaying === character.id ? '再生中...' : ''}
-                </button>
               </div>
 
-              {/* 選択チェックマーク */}
-              {selectedCharacterId === character.id && (
-                <div className={`absolute -top-3 -right-3 w-10 h-10 ${ZUNDAMON_THEME_COLORS.accent} rounded-full flex items-center justify-center shadow-xl`}>
-                  <CheckCircle className="w-6 h-6 text-white" /> {/* チェックアイコンに変更 */}
-                </div>
-              )}
-            </div>
+   
           ))}
         </div>
 

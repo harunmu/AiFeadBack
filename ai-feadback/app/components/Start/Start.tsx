@@ -32,11 +32,10 @@ const Start: React.FC = () => {
 
 
       {/* カードUI */}
-      <div className="relative max-w-lg w-full bg-white/95 backdrop-blur-md rounded-[2.5rem] shadow-xl shadow-green-300/70 p-8 border-4 border-green-400 animate-fade-in-up z-10">
+      <div className="scale-110 relative max-w-lg w-full bg-[#f2f2f2a2] backdrop-blur-md rounded-[2.5rem] shadow-xl shadow-green-300/70 p-8 animate-fade-in-up z-10">
         
         {/* タイトル */}
         <h1 className="text-4xl font-black text-center mb-6 text-gray-800 animate-bounce-in font-rounded">
-          <span role="img" aria-label="sparkles" className='mr-2 inline-block'>🍀</span>
           ずんだもんといっしょ
           <span role="img" aria-label="sparkles" className='ml-2 inline-block'></span>
         </h1>
@@ -65,26 +64,19 @@ const Start: React.FC = () => {
           {/* 1. ログイン 🚨 修正箇所: text-white -> text-gray-800 */}
           <button
             onClick={() => router.push("/login")}
-            className="w-full bg-gradient-to-r from-green-500 to-green-600 **text-gray-800** px-8 py-4 rounded-full font-extrabold text-xl shadow-lg shadow-green-300 hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
+            className="w-full bg-gray-100 text-green-500 px-8 py-4 rounded-full font-extrabold text-xl shadow-lg hover:text-white hover:bg-green-500  hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
           >
-            🔑 ログイン
+            ログイン
           </button>
           
-          {/* 2. サインイン 🚨 修正箇所: text-white -> text-gray-800 */}
+          {/* サインイン */}
           <button
             onClick={() => router.push("/signin")}
-            className="w-full bg-gradient-to-r from-lime-500 to-lime-600 **text-gray-800** px-8 py-4 rounded-full font-extrabold text-xl shadow-lg shadow-lime-300 hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
+            className="w-full text-emerald-400 bg-gray-100 px-8 py-4 rounded-full font-extrabold text-xl shadow-lg  hover:text-white hover:bg-emerald-400 hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
           >
-            📝 サインイン
+            サインイン
           </button>
           
-          {/* 3. テスト 🚨 修正箇所: text-white -> text-gray-800 */}
-          <button
-            onClick={() => router.push("/chat")}
-            className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 **text-gray-800** px-8 py-4 rounded-full font-extrabold text-xl shadow-lg shadow-emerald-300 hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
-          >
-            🧪 テスト（チャット画面へ）
-          </button>
         </div>
       </div>
 

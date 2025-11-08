@@ -58,8 +58,14 @@ const Login = () => {
 
   return (
     <div className="w-full max-w-md bg-white/90 backdrop-blur-md 
-                    rounded-3xl shadow-2xl p-8 border-2 border-green-200">
-      <h2 className="text-3xl font-bold text-center text-green-700 mb-6">ログイン</h2>
+                    rounded-3xl shadow-2xl py-12 px-10 border-2 border-green-200">
+      <div className="text-center space-y-2 mb-5">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-2 shadow-md">
+          <span className="text-3xl">🍃</span>
+        </div>
+        <h2 className="text-3xl font-bold text-green-700">ログイン</h2>
+        <p className="text-gray-500 text-sm">アカウント情報を入力してください</p>
+      </div>
       
       <div className="flex flex-col gap-4">
         <input
@@ -76,26 +82,21 @@ const Login = () => {
           placeholder="パスワード"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border-2 border-green-300 rounded-xl p-3 
+          className="border-2 border-green-300 rounded-xl p-3 mb-5
                      focus:outline-none focus:ring-2 focus:ring-green-400 
                      focus:border-green-400 transition-all duration-200"
         />
 
         <button
           onClick={handleLogin}
-          className="py-3 font-bold text-white 
-                     bg-gradient-to-r from-green-400 to-emerald-500 
-                     rounded-xl shadow-lg hover:shadow-xl hover:scale-105 
-                     transition-all duration-200"
+          className="w-full text-emerald-400 bg-white px-8 py-4 rounded-full font-extrabold text-xl shadow-lg  hover:text-white hover:bg-emerald-400 hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
+
         >
-          ログイン
+          ログイン →
         </button>
         <button
           onClick={() => router.push("/")}
-          className="py-3 font-bold text-white 
-                     bg-gradient-to-r from-lime-400 to-green-600 
-                     rounded-xl shadow-lg hover:shadow-xl hover:scale-105 
-                     transition-all duration-200"
+          className="w-full text-emerald-600 bg-white px-8 py-4 rounded-full font-extrabold text-xl shadow-lg  hover:text-white hover:bg-emerald-600 hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
         >
           ← 戻る
         </button>

@@ -82,9 +82,9 @@ const SignInForm: React.FC = () => {
   // ステップ1: ユーザー情報入力画面
   return (
     <div className="w-full max-w-xl">
-      <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl py-12 px-10 space-y-6 border-2 border-green-200">
+      <div className="bg-[#fbfbfbdd] backdrop-blur-md rounded-3xl shadow-2xl py-12 px-10 space-y-6 border-2 border-green-200">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full mb-2 shadow-md">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-2 shadow-md">
             <span className="text-3xl">🍃</span>
           </div>
           <h2 className="text-3xl font-bold text-green-700">サインイン</h2>
@@ -142,10 +142,10 @@ const SignInForm: React.FC = () => {
               type="button"
               onClick={handleNext}
               disabled={!isFormValid}
-              className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 ${
+              className={`w-full px-8 py-4 rounded-full font-extrabold text-xl text-white transition-all duration-200 ${
                 isFormValid
-                  ? 'bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-                  : 'bg-gray-300 cursor-not-allowed'
+                  ? 'bg-emerald-500 hover:bg-white hover:text-emerald-500 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+                  : 'bg-gray-200 cursor-not-allowed'
               }`}
             >
               {isFormValid ? '次へ →' : '入力内容を確認してください'}
@@ -154,7 +154,8 @@ const SignInForm: React.FC = () => {
             <button
               type="button"
               onClick={() => router.push("/")}
-              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-gradient-to-r from-lime-400 to-green-600 hover:from-lime-500 hover:to-green-700 shadow-md hover:shadow-lg transition-all duration-200"
+            className="w-full text-emerald-400 bg-white px-8 py-4 rounded-full font-extrabold text-xl shadow-lg  hover:text-white hover:bg-emerald-400 hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
+              
             >
               ← 戻る
             </button>
