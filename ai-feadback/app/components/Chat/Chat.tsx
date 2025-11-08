@@ -174,17 +174,9 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
   }
 
   // キャラクターごとの背景色設定
-  const getCharacterTheme = (characterId: number) => {
-    const themes: { [key: number]: { bg: string; accent: string } } = {
-      1: { bg: 'bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50', accent: 'bg-pink-100 border-pink-300' },
-      3: { bg: 'bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50', accent: 'bg-blue-100 border-blue-300' },
-      8: { bg: 'bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50', accent: 'bg-orange-100 border-orange-300' },
-      46: { bg: 'bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50', accent: 'bg-green-100 border-green-300' },
-    };
-    return themes[characterId] || { bg: 'bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50', accent: 'bg-purple-100 border-purple-300' };
-  };
-
-  const theme = getCharacterTheme(userData.character_id);
+const theme = currentCharacter
+  ? { bg: currentCharacter.bg, accent: currentCharacter.accent } // 見つかった場合
+  : { bg: 'bg-gray-50', accent: 'bg-gray-200 border-gray-400' }
 
   return (
     <div className={`min-h-content ${theme.bg} mb-10 pb-5`}>
@@ -221,10 +213,10 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
           <div className='flex gap-6 items-start'>
             {/* キャラクター立ち絵 */}
             {currentCharacter && (
-              <div className='flex-shrink-0 hidden lg:block relative h-[450px] w-[350px] overflow-hidden'>
+              <div className='flex-shrink-0 hidden lg:block relative h-[calc(100vh-28rem)] min-h-[450px] max-h-[700px] w-[350px] overflow-hidden'>
                 <div className='absolute -bottom-20 left-0'>
                   <Image
-                    src={`/${currentCharacter.name}.png`}
+                    src={`/img/${currentCharacter.name}.png`}
                     alt={currentCharacter.name}
                     width={350}
                     height={525}
@@ -233,9 +225,9 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
                 </div>
               </div>
             )}
-            
+
             {/* 会話エリア */}
-            <div className='flex-1 space-y-6 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar'>
+            <div className='flex-1 space-y-6 max-h-[calc(100vh-28rem)] min-h-[450px] overflow-y-auto pr-2 custom-scrollbar'>
               {chatLog.length === 0 ? (
                 <div className='text-center py-8'>
                   <p className='text-gray-400 mb-6'>まだ会話がありません。下のテキストボックスから話しかけてみましょう！</p>

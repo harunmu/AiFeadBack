@@ -15,12 +15,12 @@ const MenuBar: React.FC<MenuBarProps> = ({ currentView, onViewChange }) => {
 
   return (
     <footer className="
-      fixed bottom-0 left-0 w-full 
+      w-full 
       bg-white/90 backdrop-blur-md 
       border-t-2 border-gray-200 
       shadow-2xl z-50
     ">
-      <nav className="flex justify-around items-center h-16 max-w-lg mx-auto">
+      <nav className="flex justify-around items-center h-30 max-w-lg mx-auto">
         {menuItems.map((item) => {
           const isActive = currentView === item.id;
           return (

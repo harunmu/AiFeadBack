@@ -7,9 +7,10 @@ import '../../../app/style/date-picker.css';
 
 interface CalendarProps {
   onDateChange: (formattedDate: string) => void;
+  theme: { bg: string; accent: string };
 }
 
-const Calendar = ({ onDateChange }: CalendarProps) => {
+const Calendar = ({ onDateChange, theme }: CalendarProps) => {
   // 選択された日付を保持するState (Dateオブジェクト)
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
@@ -29,9 +30,9 @@ const Calendar = ({ onDateChange }: CalendarProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-top mt-15 ">
-      
-      <div className="w-full max-w-xl bg-white shadow-xl rounded-lg ">
+    <div className={`flex flex-col items-center justify-top  ${theme.bg} py-8`}>
+
+      <div className="w-full max-w-4xl bg-white/90 backdrop-blur-sm shadow-xl rounded-3xl border-2 border-white">
         
         <DatePicker
           selected={selectedDate} // 現在選択されている日付
