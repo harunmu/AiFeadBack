@@ -78,7 +78,6 @@ const Main = () => {
   return (
     <main className="flex flex-col min-h-screen relative">
 
-      <Header />
       
       <div className="flex-grow  overflow-hidden">
         { renderView() }
