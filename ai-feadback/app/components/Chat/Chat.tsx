@@ -113,13 +113,14 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
 
     //音声データ作成
     if (feedbackText) {
-      // フィードバックをログに表示
-      setChatLog(prevLog => [...prevLog, feedbackText]); 
 
       // audioBlobを作成
       const audioBlob = await CreateAudioBlob(feedbackText)
 
       if (audioBlob) {
+        // フィードバックをログに表示
+        setChatLog(prevLog => [...prevLog, feedbackText]); 
+        
         // 1. 音声データセット
         setAudioData(audioBlob);
       }
@@ -142,6 +143,20 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
       </div>
     );
   }
+
+  // 状態に応じてキャラ画像を変更
+  const getImageSource = (name: string): string => {
+    if (isProcessing) {
+      // 2. 処理中: 考え中
+      return `/img/${name}_考え中.png`;
+    }
+    if (audioData) {
+      // 3. 音声データセット済み: 発言済み
+      return `/img/${name}_発言.png`;
+    }
+    // 1. 通常時
+    return `/img/${name}.png`;
+  };
 
   // ログ保存
     const handleSave = async () => {
@@ -216,7 +231,8 @@ const theme = currentCharacter
               <div className='flex-shrink-0 hidden lg:block relative h-[calc(100vh-28rem)] min-h-[450px] max-h-[700px] w-[350px] overflow-hidden'>
                 <div className='absolute -bottom-20 left-0'>
                   <Image
-                    src={`/img/${currentCharacter.name}.png`}
+                    key={getImageSource(currentCharacter.name)}
+                    src={getImageSource(currentCharacter.name)}
                     alt={currentCharacter.name}
                     width={350}
                     height={525}
