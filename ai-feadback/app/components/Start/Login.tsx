@@ -105,13 +105,6 @@ const Login = () => {
       {error && (
         <p className="text-red-500 mt-4 text-center font-semibold">❌ {error}</p>
       )}
-      {userInfo && (
-        <div className="mt-4 bg-green-100 p-3 rounded-xl text-center">
-          <p className="font-bold text-green-700">✅ ログイン成功！</p>
-          <p className="text-sm text-gray-700">user_id: {userInfo.user_id}</p>
-          <p className="text-sm text-gray-700">character_id: {userInfo.character_id}</p>
-        </div>
-      )}
     </div>
   );
 };
