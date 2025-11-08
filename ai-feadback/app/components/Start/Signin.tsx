@@ -7,7 +7,6 @@ import { UserProps } from '../../../config/type';
 import { v4 as uuidv4 } from 'uuid';
 import CharacterSelection from './CharacterSelection';
 
-
 /**
  * パスワードのバリデーション関数
  * @param password - 入力されたパスワード
@@ -65,7 +64,7 @@ const SignInForm: React.FC = () => {
     }));
 
     // ユーザー登録（またはサインイン）処理を実行
-    const result = await addUser(userData);
+    await addUser(userData);
 
     router.push("/chat");
   }, [username, password, router]);
@@ -82,98 +81,84 @@ const SignInForm: React.FC = () => {
 
   // ステップ1: ユーザー情報入力画面
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div className="w-full min-w-xl">
-        <div className="bg-white rounded-2xl shadow-xl py-16 px-32 space-y-6">
-          <div className="text-center space-y-2">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mb-2">
-              <span className="text-3xl">✨</span>
-            </div>
-            <h2 className="text-3xl font-bold text-gray-800">サインイン</h2>
-            <p className="text-gray-500 text-sm">アカウント情報を入力してください</p>
+    <div className="w-full max-w-xl">
+      <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl py-12 px-10 space-y-6 border-2 border-green-200">
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full mb-2 shadow-md">
+            <span className="text-3xl">🍃</span>
+          </div>
+          <h2 className="text-3xl font-bold text-green-700">サインイン</h2>
+          <p className="text-gray-500 text-sm">アカウント情報を入力してください</p>
+        </div>
+
+        {/* 入力フォーム */}
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <label htmlFor="username" className="block text-sm font-semibold text-gray-700">
+              ユーザーネーム
+            </label>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              placeholder="ユーザーネームを入力"
+              className="block w-full pl-3 pr-3 py-3 border-2 border-green-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all duration-200"
+            />
           </div>
 
-          <div className="space-y-5">
-            <div className="space-y-2">
-              <label htmlFor="username" className="block text-sm font-semibold text-gray-700">
-                ユーザーネーム
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </div>
-                <input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                  placeholder="ユーザーネームを入力"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
-                パスワード
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="4桁以上の数字"
-                  className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 transition-all outline-none ${
-                    passwordError && password ? 'border-red-400 focus:ring-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-transparent'
-                  }`}
-                />
-              </div>
-              {passwordError && password && (
-                <p className="text-sm text-red-600 flex items-center gap-1">
-                  <span className="text-red-500">⚠</span> {passwordError}
-                </p>
-              )}
-              {!passwordError && password && (
-                <p className="text-sm text-green-600 flex items-center gap-1">
-                  <span className="text-green-500">✓</span> パスワードは有効です
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-3 pt-2">
-              <button
-                type="button"
-                onClick={handleNext}
-                disabled={!isFormValid}
-                className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 ${
-                  isFormValid
-                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-                    : 'bg-gray-300 cursor-not-allowed'
-                }`}
-              >
-                {isFormValid ? '次へ →' : '入力内容を確認してください'}
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => router.push("/")}
-                className="w-full py-3 px-4 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all duration-200"
-              >
-                ← 戻る
-              </button>
-            </div>
+          <div className="space-y-2">
+            <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
+              パスワード
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="4桁以上の数字"
+              className={`block w-full pl-3 pr-3 py-3 border-2 rounded-xl focus:ring-2 transition-all duration-200 ${
+                passwordError && password
+                  ? 'border-red-400 focus:ring-red-500'
+                  : 'border-green-300 focus:ring-green-400 focus:border-green-400'
+              }`}
+            />
+            {passwordError && password && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                ⚠ {passwordError}
+              </p>
+            )}
+            {!passwordError && password && (
+              <p className="text-sm text-green-600 flex items-center gap-1">
+                ✓ パスワードは有効です
+              </p>
+            )}
           </div>
 
+          <div className="space-y-3 pt-2">
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={!isFormValid}
+              className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 ${
+                isFormValid
+                  ? 'bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+                  : 'bg-gray-300 cursor-not-allowed'
+              }`}
+            >
+              {isFormValid ? '次へ →' : '入力内容を確認してください'}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/")}
+              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-gradient-to-r from-lime-400 to-green-600 hover:from-lime-500 hover:to-green-700 shadow-md hover:shadow-lg transition-all duration-200"
+            >
+              ← 戻る
+            </button>
+          </div>
         </div>
       </div>
     </div>
