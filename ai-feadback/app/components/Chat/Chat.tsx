@@ -25,6 +25,7 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [textAreaHeight, setTextAreaHeight] = useState<string>('3.5rem');
 
   // initialChatLogが変更された時にchatLogを更新
   useEffect(() => {
@@ -172,92 +173,168 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
     setChatLog([]);
   }
 
+  // キャラクターごとの背景色設定
+  const getCharacterTheme = (characterId: number) => {
+    const themes: { [key: number]: { bg: string; accent: string } } = {
+      1: { bg: 'bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50', accent: 'bg-pink-100 border-pink-300' },
+      3: { bg: 'bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50', accent: 'bg-blue-100 border-blue-300' },
+      8: { bg: 'bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50', accent: 'bg-orange-100 border-orange-300' },
+      46: { bg: 'bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50', accent: 'bg-green-100 border-green-300' },
+    };
+    return themes[characterId] || { bg: 'bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50', accent: 'bg-purple-100 border-purple-300' };
+  };
+
+  const theme = getCharacterTheme(userData.character_id);
+
   return (
-    <div className='relative flex items-center justify-center min-h-screen bg-gray-50 p-4'>
-
-      {/* メインコンテンツエリア（中央配置） */}
-      <div className='flex flex-col items-center space-y-8 w-full max-w-3xl z-(-1)'>
-
-        {/* 読み上げたい文章を入力セクション */}
-        <div className='w-full text-center p-6 bg-white shadow-lg rounded-xl'>
-          
-          <textarea 
-            className='w-full h-24 p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200 resize-none'
-            value={inputText}
-            onChange={
-              (e: ChangeEvent<HTMLTextAreaElement>) => {
-                  setInputText(e.target.value);
-                  setAudioData(undefined); 
-              }
-            }
-            placeholder={`文章を入力してください`}
-            disabled={isProcessing}
-          />
-        </div>
-
-        {/* 実行ボタンセクション */}
-        <div className='w-full text-center p-6 bg-white shadow-lg rounded-xl'>
-          <button 
-            className='w-full h-20 text-xl font-bold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 transition duration-200 disabled:opacity-50'
-            onClick={handleSynthesis}
-            disabled={!inputText || isProcessing} 
-          >
-            {isProcessing ? '処理中...' : '実行'}
-          </button>
-        </div>
-
-        {/* ★ chat_log 表示セクションの追加 ★ */}
-          <div className='w-full p-6 bg-white shadow-lg rounded-xl'>
-            <h2 className='text-2xl font-semibold mb-4 text-gray-700'>テキストログ</h2>
-            <div className='max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3 space-y-2'>
-              {/* ログを新しい順に表示するため reverse() を使用し、mapの前に適用 */}
-              {chatLog.slice().map((log, index) => (
-                <p 
-                  key={chatLog.length - 1 - index} 
-                  className='p-2 bg-gray-50 border-l-4 border-indigo-500 text-gray-800 text-left rounded'
-                >
-                  <span className='font-bold text-sm text-indigo-600 mr-2'>[{chatLog.length - index}]</span>
-                  {log}
-                </p>
-              ))}
-            </div>
-            <button 
-              className='mb-10 not-last-of-type:w-full h-20 text-xl font-bold text-white bg-green-500 rounded-lg shadow-md transition duration-200 disabled:opacity-50'
-              onClick={handleClear}
-              disabled={!chatLog || isSaving} 
-            >
-              クリア
-            </button>
-
-            <button 
-              className='w-full h-20 text-xl font-bold text-white bg-blue-500 rounded-lg shadow-md transition duration-200 disabled:opacity-50'
-              onClick={handleSave}
-              disabled={!chatLog || isSaving} 
-            >
-              {isSaving ? '保存中...' : '保存'}
-            </button>
-
-          </div>
+    <div className={`min-h-content ${theme.bg} mb-10 pb-5`}>
+      <div className='max-w-4xl mx-auto p-4'>
         
+        {/* 会話ログ表示 */}
+        <div className='bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl p-6 border-2 border-white'>
+          <div className='flex justify-between items-center mb-6'>
+            <h2 className='text-2xl font-bold text-gray-800 flex items-center'>
+              <span className='mr-3 text-3xl'>💬</span>
+              会話ログ
+            </h2>
+            
+            {/* ボタンエリア */}
+            <div className='flex gap-2'>
+              <button 
+                className='py-2 px-4 text-sm font-bold text-white bg-gradient-to-r from-red-400 to-pink-500 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100'
+                onClick={handleClear}
+                disabled={chatLog.length === 0 || isSaving} 
+              >
+                🗑️ クリア
+              </button>
 
+              <button 
+                className='py-2 px-4 text-sm font-bold text-white bg-gradient-to-r from-green-400 to-emerald-500 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100'
+                onClick={handleSave}
+                disabled={chatLog.length === 0 || isSaving} 
+              >
+                {isSaving ? '💾 保存中...' : '💾 保存'}
+              </button>
+            </div>
+          </div>
+          
+          <div className='flex gap-6 items-start'>
+            {/* キャラクター立ち絵 */}
+            {currentCharacter && (
+              <div className='flex-shrink-0 hidden lg:block relative h-[450px] w-[350px] overflow-hidden'>
+                <div className='absolute -bottom-20 left-0'>
+                  <Image
+                    src={`/${currentCharacter.name}.png`}
+                    alt={currentCharacter.name}
+                    width={350}
+                    height={525}
+                    className='object-contain object-bottom'
+                  />
+                </div>
+              </div>
+            )}
+            
+            {/* 会話エリア */}
+            <div className='flex-1 space-y-6 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar'>
+              {chatLog.length === 0 ? (
+                <div className='text-center py-8'>
+                  <p className='text-gray-400 mb-6'>まだ会話がありません。下のテキストボックスから話しかけてみましょう！</p>
+                </div>
+              ) : (
+                <div className='space-y-6'>
+                  {/* 会話ログ */}
+                  {chatLog.map((log, index) => {
+                    const isUser = index % 2 === 0;
+                    return (
+                      <div key={index} className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in`}>
+                        <div className={`max-w-[85%]`}>
+                          <div className={`rounded-2xl p-4 shadow-md ${
+                            isUser 
+                              ? 'bg-gradient-to-r from-blue-400 to-blue-500 text-white' 
+                              : `${theme.accent} text-gray-800 border-2`
+                          }`}>
+                            <p className='text-sm font-semibold mb-1 opacity-80'>
+                              {isUser ? 'あなた' : currentCharacter?.name}
+                            </p>
+                            <p className='leading-relaxed'>{log}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* オーディオプレイヤー（非表示） */}
+        <div className='hidden'>
           <AudioPlayer audioData={audioData} isProcessing={isProcessing} />
+        </div>
       </div>
 
-      {/* キャラクター立ち絵セクション（画面右側に固定配置） */}
-      {currentCharacter && (
-        <div className='hidden lg:block absolute right-8 top-1/2 -translate-y-1/2'>
-          <div className='flex flex-col items-center'>
-            <Image
-              src={`/${currentCharacter.name}.png`}
-              alt={currentCharacter.name}
-              width={500}
-              height={600}
-              className='object-contain'
-              priority
+      {/* 入力エリア（固定フッター） */}
+      <div className='fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-sm shadow-2xl border-t-2 border-gray-200 z-50'>
+        <div className='max-w-4xl mx-auto p-4'>
+          <div className='flex gap-3 items-center'>
+            <textarea 
+              className='flex-1 min-h-[2.8rem] max-h-[12rem] p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 resize-none text-base'
+              value={inputText}
+              onChange={
+                (e: ChangeEvent<HTMLTextAreaElement>) => {
+                    setInputText(e.target.value);
+                    setAudioData(undefined); 
+
+                    // テキストエリアの高さを自動調整
+                    e.target.style.height = 'auto';
+                    e.target.style.height = `${Math.min(e.target.scrollHeight, 12 * 16)}px`;
+                }
+              }
+              placeholder={`${currentCharacter?.name}に話しかける...`}
+              disabled={isProcessing}
             />
+            
+            <button 
+              className='h-14 px-8 text-lg font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100 whitespace-nowrap'
+              onClick={handleSynthesis}
+              disabled={!inputText || isProcessing} 
+            >
+              {isProcessing ? '⏳' : '📤'}
+            </button>
           </div>
         </div>
-      )}
+      </div>
+
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
+        }
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out;
+        }
+      `}</style>
     </div>
   )
 }
