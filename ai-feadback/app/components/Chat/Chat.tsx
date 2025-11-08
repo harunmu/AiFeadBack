@@ -2,13 +2,15 @@
 
 import React, { ChangeEvent, useState, useEffect } from 'react';
 // utilsファイルから関数と型をインポート
-import SaveChatButton from "./SaveChatButton";
 import { synthesizeVoice } from '../../utils/voicevox';
 import AudioPlayer from './AudioPlayer';
 import { generateFeedback } from '../../utils/geminiUtils';
-import { UserData } from '@/config/type';
+import { ChatlogProps, UserData } from '@/config/type';
 import { CHARACTER_OPTIONS } from '@/app/config/voiceSettings';
 import Image from 'next/image';
+import { addProgressLog } from '@/config/api';
+import { v4 as uuidv4 } from 'uuid';
+
 
 interface ChatProps {
   initialChatLog?: string[];
@@ -16,12 +18,13 @@ interface ChatProps {
 
 const Chat = ({ initialChatLog = [] }: ChatProps) => {
 
-  const [inputText, setInputText] = useState<string>('');
-  // const [feedbackText, setFeedbackText] = useState<string | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [audioData, setAudioData] = useState<Blob>()
-  const [audioBlob, setAudioBlob] = useState<Blob | undefined>(undefined);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [inputText, setInputText] = useState<string>('');
   const [chatLog, setChatLog] = useState<string[]>(initialChatLog);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   // initialChatLogが変更された時にchatLogを更新
   useEffect(() => {
@@ -29,6 +32,27 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
       setChatLog(initialChatLog);
     }
   }, [initialChatLog]);
+
+  useEffect(() => {
+    const getUserDataFromLocalStorage = (): UserData | null => {
+      const userJson = localStorage.getItem("user");
+      
+      if (!userJson) {
+        return null;
+      }
+      
+      try {
+        return JSON.parse(userJson) as UserData;
+      } catch (e) {
+        console.error("Error parsing user data:", e);
+        return null;
+      }
+    };
+
+    const data = getUserDataFromLocalStorage();
+    setUserData(data);
+    setIsLoading(false)
+  }, []); // 依存配列が空なので、マウント時のみ実行
 
   // GeminiAPI関連
   const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
@@ -103,36 +127,50 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
     setIsProcessing(false); // 処理終了
   };
 
-  // ローカルストレージからユーザー情報を取得
-  const getUserDataFromLocalStorage = (): UserData | null => {
-    const userJson = localStorage.getItem("user");
-
-    if (!userJson) {
-      return null; 
-    }
-
-    try {
-      const userData = JSON.parse(userJson) as UserData;
-      
-      if (userData.user_id && userData.character_id && userData.user_name) {
-          return userData; 
-      }
-      
-      return null; 
-
-    } catch (e) {
-      console.error("Failed to parse user data from localStorage:", e);
-      return null;
-    }
-  };
-
-  // ユーザー情報を格納
-  const userData : UserData | null = getUserDataFromLocalStorage();
-
   // キャラクター情報を取得
   const currentCharacter = userData
     ? CHARACTER_OPTIONS.find(char => char.id === userData.character_id)
     : null;
+
+  if (isLoading || !userData) { 
+    // ★ userData が null の場合もここでガードできます
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Loading or User Data Not Found...</p>
+        {/* または、ログインページへのリダイレクトなど */}
+      </div>
+    );
+  }
+
+  // ログ保存
+    const handleSave = async () => {
+    if (chatLog.length === 0) {
+      return;
+    }
+
+    const progressData : ChatlogProps = {
+      chat_id: uuidv4(),
+      user_id: userData.user_id,
+      chatlog: chatLog,
+      created_at: new Date().toISOString()
+    };
+
+    setIsSaving(true);
+
+    try {
+      // Supabase テーブル名は chat_logs と仮定
+      await addProgressLog(progressData)
+    } catch (err: any) {
+      console.error("保存エラー:", err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  //ログをクリア
+  const handleClear = () =>{
+    setChatLog([]);
+  }
 
   return (
     <div className='relative flex items-center justify-center min-h-screen bg-gray-50 p-4'>
@@ -183,7 +221,22 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
                 </p>
               ))}
             </div>
-            <SaveChatButton user_id={userData!.user_id} chatlog={chatLog} />
+            <button 
+              className='mb-10 not-last-of-type:w-full h-20 text-xl font-bold text-white bg-green-500 rounded-lg shadow-md transition duration-200 disabled:opacity-50'
+              onClick={handleClear}
+              disabled={!chatLog || isSaving} 
+            >
+              クリア
+            </button>
+
+            <button 
+              className='w-full h-20 text-xl font-bold text-white bg-blue-500 rounded-lg shadow-md transition duration-200 disabled:opacity-50'
+              onClick={handleSave}
+              disabled={!chatLog || isSaving} 
+            >
+              {isSaving ? '保存中...' : '保存'}
+            </button>
+
           </div>
         
 
