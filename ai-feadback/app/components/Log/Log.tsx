@@ -41,7 +41,7 @@ const Log = ({ selectedDate, onLogClick, userId, theme }: LogProps) => {
   }, [selectedDate, userId]); // selectedDateが変更されたときに再取得
 
   return (
-    <div className={`max-h-screen ${theme.bg} py-8 px-6`}>
+    <div className={`max-h-screen bg-${theme.color}-100 py-8 px-6`}>
       <div className="max-w-4xl mx-auto">
 
       {/* ローディング */}

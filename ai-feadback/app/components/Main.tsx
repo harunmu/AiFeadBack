@@ -80,14 +80,13 @@ const Main = () => {
 
       <Header />
       
-      <div className="flex-grow p-4 overflow-hidden">
+      <div className="flex-grow  overflow-hidden">
         { renderView() }
       </div>
 
       <MenuBar 
         currentView={currentView} 
         onViewChange={setCurrentView}
-        userId={userId}
         theme={theme}
       />
       
