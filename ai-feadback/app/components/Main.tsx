@@ -36,7 +36,7 @@ const Main = () => {
 
       <Header />
       
-      <div className="flex-grow p-4 mb-16">
+      <div className="flex-grow p-4 overflow-hidden">
         { renderView() }
       </div>
 

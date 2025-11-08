@@ -1,5 +1,4 @@
 import React from 'react';
-// import { BookOpen, MessageSquare } from 'lucide-react'; // アイコンライブラリの例
 
 type View = 'log' | 'chat';
 
@@ -9,38 +8,41 @@ interface MenuBarProps {
 }
 
 const MenuBar: React.FC<MenuBarProps> = ({ currentView, onViewChange }) => {
-  
-  // 各ボタンの設定
   const menuItems = [
-    { id: 'chat' as View, label: 'チャット' },
-    { id: 'log' as View, label: 'ログ' },
+    { id: 'chat' as View, label: '💬 チャット' },
+    { id: 'log' as View, label: '📘 ログ' },
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-xl z-10">
+    <footer className="
+      fixed bottom-0 left-0 w-full 
+      bg-white/90 backdrop-blur-md 
+      border-t-2 border-gray-200 
+      shadow-2xl z-50
+    ">
       <nav className="flex justify-around items-center h-16 max-w-lg mx-auto">
         {menuItems.map((item) => {
           const isActive = currentView === item.id;
-          
           return (
             <button
               key={item.id}
               onClick={() => onViewChange(item.id)}
-              className={`flex flex-col items-center justify-center p-2 text-sm font-medium transition-colors ${
-                isActive 
-                  ? 'text-indigo-600 border-t-2 border-indigo-600 -mt-0.5' // アクティブ時のスタイル
-                  : 'text-gray-500 hover:text-indigo-600' // 非アクティブ時のスタイル
-              }`}
+              className={`
+                flex flex-col items-center justify-center 
+                px-6 py-2 rounded-2xl 
+                transition-all duration-200
+                ${isActive
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md scale-105'
+                  : 'text-gray-600 hover:text-purple-500 hover:scale-105'
+                }
+              `}
             >
-              {/* アイコンのレンダリング */}
-              {/* <item.icon className="w-5 h-5 mb-0.5" /> */}
-              {/* ラベル */}
-              <span className="text-xs">{item.label}</span>
+              <span className="text-sm font-semibold tracking-wide">{item.label}</span>
             </button>
           );
         })}
       </nav>
-    </div>
+    </footer>
   );
 };
 
