@@ -267,7 +267,7 @@ const theme = currentCharacter
       </div>
 
       {/* 入力エリア（固定フッター） */}
-      <div className='fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-sm shadow-2xl border-t-2 border-gray-200 z-50'>
+      <div className='fixed bottom-30 left-0 right-0 bg-white/95 backdrop-blur-sm shadow-2xl border-t-2 border-gray-200 z-50'>
         <div className='max-w-4xl mx-auto p-4'>
           <div className='flex gap-3 items-center'>
             <textarea 

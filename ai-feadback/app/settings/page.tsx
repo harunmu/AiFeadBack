@@ -154,7 +154,7 @@ const SettingsPage = () => {
                   {/* キャラクター画像（上部にフォーカス） */}
                   <div className="w-48 h-56 relative overflow-hidden">
                     <Image
-                      src={`/${character.name}.png`}
+                      src={`/img/${character.name}.png`}
                       alt={character.name}
                       width={400}
                       height={600}

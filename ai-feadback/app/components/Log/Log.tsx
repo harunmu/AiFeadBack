@@ -9,7 +9,7 @@ interface LogProps {
   selectedDate: string;
   onLogClick: (chatlog: string[]) => void;
   userId: string | null;
-  theme: { bg: string; accent: string };
+  theme: { bg: string; accent: string; color: string };
 }
 
 const Log = ({ selectedDate, onLogClick, userId, theme }: LogProps) => {
