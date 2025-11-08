@@ -4,19 +4,9 @@ import { useRouter } from "next/navigation";
 import React, { useState, useCallback, useMemo } from 'react';
 import { addUser } from '../../../config/api';
 import { UserProps } from '../../../config/type';
+import { CHARACTER_OPTIONS, SPEAKER_IDS } from "@/app/config/voiceSettings";
+import { v4 as uuidv4 } from 'uuid';
 
-// キャラクターとそのIDの定義
-interface Character {
-  id: number;
-  name: string;
-  color: string;
-}
-
-const CHARACTERS: Character[] = [
-  { id: 1, name: 'キャラクター1', color: 'from-orange-400 to-red-400' },
-  { id: 2, name: 'キャラクター2', color: 'from-blue-400 to-purple-400' },
-  { id: 3, name: 'キャラクター3', color: 'from-pink-400 to-rose-400' },
-];
 
 /**
  * パスワードのバリデーション関数
@@ -38,7 +28,7 @@ const SignInForm: React.FC = () => {
   const router = useRouter();
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [selectedCharId, setSelectedCharId] = useState<number>(CHARACTERS[0].id);
+  const [selectedCharId, setSelectedCharId] = useState<number>(CHARACTER_OPTIONS[0].id);
 
   // エラーメッセージを格納
   const passwordError = useMemo(() => validatePassword(password), [password]);
@@ -57,10 +47,17 @@ const SignInForm: React.FC = () => {
 
     // addUserに渡すデータオブジェクトを作成 (UserProps型に準拠)
     const userData: UserProps = {
+      user_id: uuidv4(),
       user_name: username,
       password: password,
       character_id: selectedCharId,
     };
+
+    localStorage.setItem("user", JSON.stringify({
+      user_id: userData.user_id,
+      user_name: userData.user_name,
+      character_id: userData.character_id,
+      }));
 
     // try {
       // ユーザー登録（またはサインイン）処理を実行
@@ -75,8 +72,6 @@ const SignInForm: React.FC = () => {
     //   console.error('サインイン処理中に予期せぬエラーが発生:', error);
     // }
   }, [username, password, selectedCharId, isFormValid]);
-
-  const selectedChar = CHARACTERS.find(c => c.id === selectedCharId);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
@@ -152,7 +147,7 @@ const SignInForm: React.FC = () => {
                 キャラクター選択
               </label>
               <div className="grid grid-cols-3 gap-3">
-                {CHARACTERS.map((char) => (
+                {CHARACTER_OPTIONS.map((char) => (
                   <button
                     key={char.id}
                     type="button"
@@ -176,13 +171,6 @@ const SignInForm: React.FC = () => {
                   </button>
                 ))}
               </div>
-              {selectedChar && (
-                <div className={`mt-2 p-3 rounded-lg bg-gradient-to-r ${selectedChar.color} bg-opacity-10 border border-opacity-20`}>
-                  <p className="text-sm text-center text-gray-700">
-                    選択中: <span className="font-semibold">{selectedChar.name}</span> (ID: {selectedCharId})
-                  </p>
-                </div>
-              )}
             </div>
 
             <div className="space-y-3 pt-2">
@@ -210,10 +198,6 @@ const SignInForm: React.FC = () => {
           </div>
 
         </div>
-
-        <p className="text-center text-sm text-gray-500 mt-4">
-          初めてのご利用ですか? アカウントを作成してください
-        </p>
       </div>
     </div>
   );

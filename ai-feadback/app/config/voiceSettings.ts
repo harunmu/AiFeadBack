@@ -14,7 +14,7 @@ export const AUDIO_SETTINGS = {
 };
 
 export const CHARACTER_OPTIONS = [
-  { id: SPEAKER_IDS.ZUNDAMON, name: 'ずんだもん' },
-  { id: SPEAKER_IDS.WHITECUL, name: 'WhiteCUL' },
-  { id: SPEAKER_IDS.MEIMEIHIMARI, name: '冥鳴ひまり' },
+  { id: SPEAKER_IDS.ZUNDAMON, name: 'ずんだもん', },
+  { id: SPEAKER_IDS.WHITECUL, name: '春日部つむぎ',  },
+  { id: SPEAKER_IDS.MEIMEIHIMARI, name: '冥鳴ひまり', },
 ];

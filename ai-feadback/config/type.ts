@@ -6,6 +6,7 @@ export interface ChatlogProps{
 }
 
 export interface UserProps{
+    user_id: string;
     user_name: string;
     password: string;
     character_id: number;
@@ -13,6 +14,6 @@ export interface UserProps{
 
 export interface UserData{
     user_id: string;
-    character_id: string;
+    character_id: number;
     user_name: string;
 }
