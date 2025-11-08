@@ -1,27 +1,70 @@
-import React from 'react';
+"use client"
 
-interface AudioPlayerProps{
+import React, { useEffect, useRef, useState } from 'react';
+
+interface AudioPlayerProps {
   audioData: Blob | undefined;
   isProcessing: boolean;
-};
+}
 
-/**
- * 合成された音声データを自動再生するための非表示コンポーネント
- */
 const AudioPlayer = ({ audioData, isProcessing }: AudioPlayerProps) => {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  
+  const hasPlayedRef = useRef(false);
 
-  if (!audioData || isProcessing) {
+  const [audioSrc, setAudioSrc] = useState<string | undefined>(undefined);
+
+  // ④ audioDataが変わったときのみ新しいURLを生成
+  useEffect(() => {
+    if (audioData) {
+      // 古いURLを解放
+      if (audioSrc) {
+        window.URL.revokeObjectURL(audioSrc);
+      }
+      
+      const newSrc = window.URL.createObjectURL(audioData);
+      setAudioSrc(newSrc);
+      
+      hasPlayedRef.current = false;
+    } else if (audioSrc) {
+      window.URL.revokeObjectURL(audioSrc);
+      setAudioSrc(undefined);
+    }
+
+    return () => {
+      if (audioSrc) {
+        window.URL.revokeObjectURL(audioSrc);
+      }
+    };
+  }, [audioData]);
+
+  // ⑤ audioSrcが設定されたら再生（一度だけ）
+  useEffect(() => {
+    if (!audioSrc || isProcessing || hasPlayedRef.current) {
+      return;
+    }
+
+    const audioEl = audioRef.current;
+    
+    if (audioEl) {
+      audioEl.play().then(() => {
+          hasPlayedRef.current = true;
+      }).catch(error => {
+          console.error("Audio playback failed:", error);
+      });
+    }
+
+  }, [audioSrc, isProcessing]); 
+
+  if (!audioSrc) {
     return null;
   }
 
-  // BlobデータをURLに変換して、audioタグに渡す
-  const audioSrc = window.URL.createObjectURL(audioData);
-
   return (
     <audio
-      hidden // UIには表示しない
-      autoPlay // 自動再生する
-      src={audioSrc}
+      ref={audioRef} // refを設定
+      hidden 
+      src={audioSrc} // ステートで管理されたURLを渡す
     />
   );
 };
