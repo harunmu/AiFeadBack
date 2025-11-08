@@ -14,8 +14,8 @@ const MenuBar: React.FC<MenuBarProps> = ({ currentView, onViewChange, theme }) =
   const menuItems = [
     { id: 'chat' as View, label: <MessageCircle /> },
     { id: 'log' as View, label: <CalendarDays /> },
-    { id: 'settings' as View, label: <Settings size={32} />, href: '/settings' },
-    { id: 'terms' as View, label: <CircleQuestionMark size={32} />, href: '/terms' },
+    { id: 'settings' as View, label: <Settings  />, href: '/settings' },
+    { id: 'terms' as View, label: <CircleQuestionMark />, href: '/terms' },
   ];
 
   // colorに基づいた実際の色を定義
@@ -51,10 +51,10 @@ const MenuBar: React.FC<MenuBarProps> = ({ currentView, onViewChange, theme }) =
                   <Link 
                     key={item.id}
                     href={item.href}
-                    className={`scale-180 flex flex-col items-center justify-center px-6 py-2 rounded-full transition-all duration-200
+                    className={`scale-220 flex flex-col items-center justify-center px-6 py-2 rounded-full transition-all duration-200
                     ${isActive
                       ? `bg-gradient-to-r ${colors.active} text-white shadow-lg scale-180 hover:shadow-xl`
-                      : `text-gray-600 ${colors.hover} hover:scale-200`
+                      : `text-gray-600 ${colors.hover} hover:scale-240`
                     }
                   `}
                     // aria-label={item.id === 'settings' ? '設定' : '利用規約'}
@@ -71,10 +71,10 @@ const MenuBar: React.FC<MenuBarProps> = ({ currentView, onViewChange, theme }) =
                 <button
                   key={item.id}
                   onClick={() => onViewChange(item.id)}
-                  className={`scale-180 flex flex-col items-center justify-center px-6 py-2 rounded-full transition-all duration-200
+                  className={`scale-200 flex flex-col items-center justify-center px-6 py-2 rounded-full transition-all duration-200
                     ${isActive
                       ? `bg-gradient-to-r ${colors.active} text-white shadow-lg scale-180 hover:shadow-xl`
-                      : `text-gray-600 ${colors.hover} hover:scale-200`
+                      : `text-gray-600 ${colors.hover} hover:scale-220`
                     }
                   `}
                 >
