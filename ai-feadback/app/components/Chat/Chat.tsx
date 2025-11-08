@@ -16,6 +16,8 @@ interface ChatProps {
 
 const Chat = ({ initialChatLog = [] }: ChatProps) => {
 
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [inputText, setInputText] = useState<string>('');
   // const [feedbackText, setFeedbackText] = useState<string | null>(null);
   const [audioData, setAudioData] = useState<Blob>()
@@ -29,6 +31,27 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
       setChatLog(initialChatLog);
     }
   }, [initialChatLog]);
+
+  useEffect(() => {
+    const getUserDataFromLocalStorage = (): UserData | null => {
+      const userJson = localStorage.getItem("user");
+      
+      if (!userJson) {
+        return null;
+      }
+      
+      try {
+        return JSON.parse(userJson) as UserData;
+      } catch (e) {
+        console.error("Error parsing user data:", e);
+        return null;
+      }
+    };
+
+    const data = getUserDataFromLocalStorage();
+    setUserData(data);
+    setIsLoading(false)
+  }, []); // 依存配列が空なので、マウント時のみ実行
 
   // GeminiAPI関連
   const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
@@ -103,36 +126,20 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
     setIsProcessing(false); // 処理終了
   };
 
-  // ローカルストレージからユーザー情報を取得
-  const getUserDataFromLocalStorage = (): UserData | null => {
-    const userJson = localStorage.getItem("user");
-
-    if (!userJson) {
-      return null; 
-    }
-
-    try {
-      const userData = JSON.parse(userJson) as UserData;
-      
-      if (userData.user_id && userData.character_id && userData.user_name) {
-          return userData; 
-      }
-      
-      return null; 
-
-    } catch (e) {
-      console.error("Failed to parse user data from localStorage:", e);
-      return null;
-    }
-  };
-
-  // ユーザー情報を格納
-  const userData : UserData | null = getUserDataFromLocalStorage();
-
   // キャラクター情報を取得
   const currentCharacter = userData
     ? CHARACTER_OPTIONS.find(char => char.id === userData.character_id)
     : null;
+
+  if (isLoading || !userData) { 
+    // ★ userData が null の場合もここでガードできます
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Loading or User Data Not Found...</p>
+        {/* または、ログインページへのリダイレクトなど */}
+      </div>
+    );
+  }
 
   return (
     <div className='relative flex items-center justify-center min-h-screen bg-gray-50 p-4'>

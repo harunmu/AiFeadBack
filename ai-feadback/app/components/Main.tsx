@@ -5,6 +5,7 @@ import Image from "next/image";
 import LogPreview from "./Log/LogPreview";
 import Chat from "./Chat/Chat";
 import MenuBar from './MenuBar';
+import Header from './Header';
 
 type CurrentView = 'log' | 'chat';
 
@@ -32,6 +33,8 @@ const Main = () => {
 
   return (
     <main className="flex flex-col min-h-screen relative">
+
+      <Header />
       
       <div className="flex-grow p-4 mb-16">
         { renderView() }
