@@ -59,7 +59,7 @@ const Calendar = ({ onDateChange, theme }: CalendarProps) => {
   const colors = colorMap[themeColor] || colorMap.purple;
 
   return (
-    <div className={`flex flex-col items-center justify-top  bg-${theme.color}-100 py-8`}>
+    <div className={`flex flex-col items-center justify-top  bg-${theme.color}-100 pt-20`}>
 
       <div
         className="w-full max-w-4xl bg-white/90 backdrop-blur-sm shadow-xl rounded-3xl border-2 border-white calendar-container"
