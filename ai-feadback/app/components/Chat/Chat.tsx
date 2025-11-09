@@ -191,8 +191,8 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
 
   // キャラクターごとの背景色設定
 const theme = currentCharacter
-  ? { bg: currentCharacter.bg, accent: currentCharacter.accent, bgButton: currentCharacter.bgButton } // 見つかった場合
-  : { bg: 'bg-gray-50', accent: 'bg-gray-200 border-gray-400', bgButton: 'gray'}
+  ? { bg: currentCharacter.bg, accent: currentCharacter.accent, bgButton: currentCharacter.bgButton, textColor:currentCharacter.textColor} // 見つかった場合
+  : { bg: 'bg-gray-50', accent: 'bg-gray-200 border-gray-400', bgButton: 'gray', textColor: 'black'}
 
   return (
     <div className={`min-h-content ${theme.bg} mb-10 pb-5`}>
@@ -254,7 +254,7 @@ const theme = currentCharacter
                 <div className='  flex  flex-col gap-2 items-center'>
                   
                   <button 
-                   className="w-[90%] text-emerald-600 bg-white  py-4 rounded-full font-extrabold text-xl shadow-lg  hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
+                   className={`w-[90%] ${theme.textColor} bg-white  py-4 rounded-full font-extrabold text-xl shadow-lg  hover:shadow-xl hover:scale-[1.03] transition-all duration-300`}
                     
                     onClick={handleClear}
                     disabled={chatLog.length === 0 || isSaving} 
