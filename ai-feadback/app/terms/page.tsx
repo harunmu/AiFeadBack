@@ -29,8 +29,8 @@ const TermsPage = () => {
 
   // キャラクターごとの背景色設定
   const theme = currentCharacter
-    ? { bg: currentCharacter.bg, accent: currentCharacter.accent, color: currentCharacter.color }
-    : { bg: 'bg-gray-50', accent: 'bg-gray-200 border-gray-400', color: 'gray' }
+    ? { bg: currentCharacter.bg, accent: currentCharacter.accent, color: currentCharacter.color, bgButton: currentCharacter.bgButton, textColor:currentCharacter.textColor}
+    : { bg: 'bg-gray-50', accent: 'bg-gray-200 border-gray-400', color: 'gray', bgButton: 'gray', textColor: 'black'};
 
   return (
 <div className={`min-h-screen ${theme.bg} p-4`}>
@@ -42,9 +42,9 @@ const TermsPage = () => {
         className="p-2 hover:bg-gray-100 rounded-full transition-colors mr-3"
         aria-label="戻る"
       >
-        <ArrowLeft className="w-6 h-6 text-gray-700" />
+        <ArrowLeft className="w-8 h-8 text-gray-700" />
       </button>
-      <h1 className="text-3xl font-bold text-gray-800">利用規約 / クレジット</h1>
+      <h1 className="text-3xl font-bold text-gray-700">利用規約 / クレジット</h1>
     </div>
 
     {/* コンテンツカード */}
@@ -53,7 +53,7 @@ const TermsPage = () => {
 
       {/* 1. 音声生成技術クレジット */}
       <section>
-        <h3 className="text-xl font-semibold mb-3 border-b pb-1 text-indigo-600">
+        <h3 className={`text-xl font-semibold mb-3 border-b pb-1 ${theme.textColor}`}>
           音声生成技術
         </h3>
         <p className="text-gray-700">
@@ -74,7 +74,7 @@ const TermsPage = () => {
 
       {/* 2. 音声キャラクタークレジット */}
       <section>
-        <h3 className="text-xl font-semibold mb-3 border-b pb-1 text-indigo-600">
+        <h3 className={`text-xl font-semibold mb-3 border-b pb-1 ${theme.textColor}`}>
           使用音声キャラクター
         </h3>
         <ul className="list-disc list-inside space-y-1 ml-4 text-gray-700">
@@ -87,7 +87,7 @@ const TermsPage = () => {
 
       {/* 3. 立ち絵クレジット */}
       <section>
-        <h3 className="text-xl font-semibold mb-3 border-b pb-1 text-indigo-600">
+        <h3 className={`text-xl font-semibold mb-3 border-b pb-1 ${theme.textColor}`}>
           立ち絵クレジット
         </h3>
         

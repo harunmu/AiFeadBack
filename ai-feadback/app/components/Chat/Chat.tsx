@@ -252,9 +252,9 @@ const theme = currentCharacter
               )}
             </div>
             {/* ボタンエリア */}
-            <div className='my-2 flex  flex-col gap-2 items-center'>
+            <div className='my-4 flex  flex-col gap-2 items-center'>
               <button 
-                className={`w-[90%] ${theme.textColor} bg-white  py-4 rounded-full font-extrabold text-xl shadow-lg  hover:shadow-xl hover:scale-[1.03] transition-all duration-300`}
+                className={`mb-2 w-[90%] ${theme.textColor} bg-white  py-4 rounded-full font-extrabold text-xl shadow-lg  hover:shadow-xl hover:scale-[1.03] transition-all duration-300`}
                 
                 onClick={handleClear}
                 disabled={chatLog.length === 0 || isSaving} 
