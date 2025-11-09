@@ -41,7 +41,7 @@ const Log = ({ selectedDate, onLogClick, userId, theme }: LogProps) => {
   }, [selectedDate, userId]); // selectedDateが変更されたときに再取得
 
   return (
-    <div className={`max-h-screen bg-${theme.color}-100 py-8 px-6`}>
+    <div className={`max-h-screen bg-${theme.color}-100 py-10 px-6`}>
       <div className="max-w-4xl mx-auto">
 
       {/* ローディング */}
@@ -79,7 +79,7 @@ const Log = ({ selectedDate, onLogClick, userId, theme }: LogProps) => {
           {logs.map((log) => (
             <div
               key={log.chat_id}
-              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl p-6 border-2 border-white hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 cursor-pointer animate-fade-in group"
+              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl p-6 border-2 border-white hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 cursor-pointer animate-fade-in group"
               onClick={() => onLogClick(log.chatlog)}
             >
               <div className="flex items-start gap-4">
@@ -89,7 +89,7 @@ const Log = ({ selectedDate, onLogClick, userId, theme }: LogProps) => {
                       {log.chatlog[0]}
                     </p>
                   </div>
-                  <div className="mt-3 flex items-center justify-end gap-2 text-xs text-gray-400">
+                  <div className="mt-3 flex items-center justify-end gap-2  font-light text-gray-400">
                     <span>クリックして詳細を表示</span>
                     <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
                   </div>
