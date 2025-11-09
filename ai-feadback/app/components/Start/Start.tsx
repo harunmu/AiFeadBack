@@ -34,13 +34,12 @@ const Start: React.FC = () => {
         </h1>
         
         {/* ずんだもんイラスト */}
-        <div className='flex justify-center my-8 animate-float'>
+        <div className='flex justify-center my-8 animate-float object-contain'>
           <div className='relative w-[220px] h-[320px]'> 
             <Image
               src={`/img/${ZUNDAMON_THEME.name}_スタート画面.png`}
               alt={ZUNDAMON_THEME.name}
-              layout="fill"
-              objectFit="contain"
+              fill
               className="object-bottom filter drop-shadow-2xl shadow-green-300/80"
             />
           </div>
