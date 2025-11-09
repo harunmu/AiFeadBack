@@ -219,6 +219,7 @@ const theme = currentCharacter
               </div>
             )}
 
+          <div className='flex flex-col'>
             {/* 会話エリア */}
             <div className='flex-1 space-y-6 max-h-[calc(100vh-28rem)] min-h-[450px] overflow-y-auto pr-2 custom-scrollbar'>
               {chatLog.length === 0 ? (
@@ -249,34 +250,32 @@ const theme = currentCharacter
                   })}
                 </div>
               )}
-
-              {/* ボタンエリア */}
-                <div className='  flex  flex-col gap-2 items-center'>
-                  
-                  <button 
-                   className={`w-[90%] ${theme.textColor} bg-white  py-4 rounded-full font-extrabold text-xl shadow-lg  hover:shadow-xl hover:scale-[1.03] transition-all duration-300`}
-                    
-                    onClick={handleClear}
-                    disabled={chatLog.length === 0 || isSaving} 
-                  >
-                    クリア
-                  </button>
-
-                  <button 
-                   className={`w-[90%]  py-4 rounded-full font-extrabold text-xl shadow-lg  transition-all duration-300
-                   ${isSaving || chatLog.length === 0
-                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                      : `text-white ${theme.bgButton} hover:text-white hover:bg-emerald-500 hover:shadow-xl hover:scale-[1.03]`
-                  }`}
-                    onClick={handleSave}
-                    disabled={chatLog.length === 0 || isSaving} 
-                  >
-                    {isSaving ? ' 保存中...' : '保存'}
-                  </button>
-                </div>
-
-
             </div>
+            {/* ボタンエリア */}
+            <div className='my-2 flex  flex-col gap-2 items-center'>
+              <button 
+                className={`w-[90%] ${theme.textColor} bg-white  py-4 rounded-full font-extrabold text-xl shadow-lg  hover:shadow-xl hover:scale-[1.03] transition-all duration-300`}
+                
+                onClick={handleClear}
+                disabled={chatLog.length === 0 || isSaving} 
+              >
+                クリア
+              </button>
+
+              <button 
+                className={`mb-4 w-[90%]  py-4 rounded-full font-extrabold text-xl shadow-lg  transition-all duration-300
+                ${isSaving || chatLog.length === 0
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : `text-white ${theme.bgButton} hover:text-white hover:bg-emerald-500 hover:shadow-xl hover:scale-[1.03]`
+              }`}
+                onClick={handleSave}
+                disabled={chatLog.length === 0 || isSaving} 
+              >
+                {isSaving ? ' 保存中...' : '保存'}
+              </button>
+            </div>
+
+          </div>
 
           </div>
         </div>
