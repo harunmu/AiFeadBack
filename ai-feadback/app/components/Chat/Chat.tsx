@@ -1,6 +1,6 @@
 "use client"
 
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState, useEffect, useRef } from 'react';
 // utilsファイルから関数と型をインポート
 import { synthesizeVoice } from '../../utils/voicevox';
 import AudioPlayer from './AudioPlayer';
@@ -26,7 +26,8 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [textAreaHeight, setTextAreaHeight] = useState<string>('3.5rem');
+
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   // initialChatLogが変更された時にchatLogを更新
   useEffect(() => {
@@ -108,6 +109,11 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
     setChatLog(prevLog => [...prevLog, currentText]); 
     // textareaをクリア
     setInputText('')
+
+    // テキストエリアの高さをリセット
+    if (textAreaRef.current) {
+    textAreaRef.current.style.height = '4.8rem'; 
+  }
 
     // フィードバック作成
     const feedbackText = await handleTextFeedback(currentText);
@@ -291,6 +297,7 @@ const theme = currentCharacter
         <div className='max-w-4xl mx-auto p-4'>
           <div className='flex gap-3 items-center'>
             <textarea 
+              ref={textAreaRef}
               className={`flex-1 min-h-[2.8rem] max-h-[12rem] p-3 border-2 border-gray-300 rounded-xl  focus:outline-gray-500 transition-all duration-200 resize-none text-base`}
               value={inputText}
               onChange={
