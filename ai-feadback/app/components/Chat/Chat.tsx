@@ -219,7 +219,7 @@ const theme = currentCharacter
               </div>
             )}
 
-          <div className='flex flex-col'>
+          <div className='flex flex-col min-w-[450px]'>
             {/* 会話エリア */}
             <div className='flex-1 space-y-6 max-h-[calc(100vh-28rem)] min-h-[450px] overflow-y-auto pr-2 custom-scrollbar'>
               {chatLog.length === 0 ? (
@@ -266,7 +266,7 @@ const theme = currentCharacter
                 className={`mb-4 w-[90%]  py-4 rounded-full font-extrabold text-xl shadow-lg  transition-all duration-300
                 ${isSaving || chatLog.length === 0
                   ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : `text-white ${theme.bgButton} hover:text-white hover:bg-emerald-500 hover:shadow-xl hover:scale-[1.03]`
+                  : `text-white ${theme.bgButton} hover:text-white  hover:shadow-xl hover:scale-[1.03]`
               }`}
                 onClick={handleSave}
                 disabled={chatLog.length === 0 || isSaving} 
