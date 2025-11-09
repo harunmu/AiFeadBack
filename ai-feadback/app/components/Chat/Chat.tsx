@@ -10,6 +10,7 @@ import { CHARACTER_OPTIONS } from '@/app/config/voiceSettings';
 import Image from 'next/image';
 import { addProgressLog } from '@/config/api';
 import { v4 as uuidv4 } from 'uuid';
+import { Send } from 'lucide-react';
 
 
 interface ChatProps {
@@ -190,42 +191,18 @@ const Chat = ({ initialChatLog = [] }: ChatProps) => {
 
   // キャラクターごとの背景色設定
 const theme = currentCharacter
-  ? { bg: currentCharacter.bg, accent: currentCharacter.accent } // 見つかった場合
-  : { bg: 'bg-gray-50', accent: 'bg-gray-200 border-gray-400' }
+  ? { bg: currentCharacter.bg, accent: currentCharacter.accent, bgButton: currentCharacter.bgButton, textColor:currentCharacter.textColor} // 見つかった場合
+  : { bg: 'bg-gray-50', accent: 'bg-gray-200 border-gray-400', bgButton: 'gray', textColor: 'black'}
 
   return (
     <div className={`min-h-content ${theme.bg} mb-10 pb-5`}>
       <div className='max-w-4xl mx-auto p-4'>
         
         {/* 会話ログ表示 */}
-        <div className='bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl p-6 border-2 border-white'>
-          <div className='flex justify-between items-center mb-6'>
-            <h2 className='text-2xl font-bold text-gray-800 flex items-center'>
-              <span className='mr-3 text-3xl'>💬</span>
-              会話ログ
-            </h2>
-            
-            {/* ボタンエリア */}
-            <div className='flex gap-2'>
-              <button 
-                className='py-2 px-4 text-sm font-bold text-white bg-gradient-to-r from-red-400 to-pink-500 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100'
-                onClick={handleClear}
-                disabled={chatLog.length === 0 || isSaving} 
-              >
-                🗑️ クリア
-              </button>
+        <div className='relative bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl p-6 border-2 border-white'>
 
-              <button 
-                className='py-2 px-4 text-sm font-bold text-white bg-gradient-to-r from-green-400 to-emerald-500 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100'
-                onClick={handleSave}
-                disabled={chatLog.length === 0 || isSaving} 
-              >
-                {isSaving ? '💾 保存中...' : '💾 保存'}
-              </button>
-            </div>
-          </div>
           
-          <div className='flex gap-6 items-start'>
+          <div className='flex  gap-6 items-start flex-grow'>
             {/* キャラクター立ち絵 */}
             {currentCharacter && (
               <div className='flex-shrink-0 hidden lg:block relative h-[calc(100vh-28rem)] min-h-[450px] max-h-[700px] w-[350px] overflow-hidden'>
@@ -249,16 +226,16 @@ const theme = currentCharacter
                   <p className='text-gray-400 mb-6'>まだ会話がありません。下のテキストボックスから話しかけてみましょう！</p>
                 </div>
               ) : (
-                <div className='space-y-6'>
+                <div className='space-y-6 '>
                   {/* 会話ログ */}
                   {chatLog.map((log, index) => {
                     const isUser = index % 2 === 0;
                     return (
                       <div key={index} className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in`}>
                         <div className={`max-w-[85%]`}>
-                          <div className={`rounded-2xl p-4 shadow-md ${
+                          <div className={`rounded-2xl p-5 shadow-md ${
                             isUser 
-                              ? 'bg-gradient-to-r from-blue-400 to-blue-500 text-white' 
+                              ? 'bg-blue-400 text-white' 
                               : `${theme.accent} text-gray-800 border-2`
                           }`}>
                             <p className='text-sm font-semibold mb-1 opacity-80'>
@@ -272,7 +249,35 @@ const theme = currentCharacter
                   })}
                 </div>
               )}
+
+              {/* ボタンエリア */}
+                <div className='  flex  flex-col gap-2 items-center'>
+                  
+                  <button 
+                   className={`w-[90%] ${theme.textColor} bg-white  py-4 rounded-full font-extrabold text-xl shadow-lg  hover:shadow-xl hover:scale-[1.03] transition-all duration-300`}
+                    
+                    onClick={handleClear}
+                    disabled={chatLog.length === 0 || isSaving} 
+                  >
+                    クリア
+                  </button>
+
+                  <button 
+                   className={`w-[90%]  py-4 rounded-full font-extrabold text-xl shadow-lg  transition-all duration-300
+                   ${isSaving || chatLog.length === 0
+                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      : `text-white ${theme.bgButton} hover:text-white hover:bg-emerald-500 hover:shadow-xl hover:scale-[1.03]`
+                  }`}
+                    onClick={handleSave}
+                    disabled={chatLog.length === 0 || isSaving} 
+                  >
+                    {isSaving ? ' 保存中...' : '保存'}
+                  </button>
+                </div>
+
+
             </div>
+
           </div>
         </div>
 
@@ -287,7 +292,7 @@ const theme = currentCharacter
         <div className='max-w-4xl mx-auto p-4'>
           <div className='flex gap-3 items-center'>
             <textarea 
-              className='flex-1 min-h-[2.8rem] max-h-[12rem] p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 resize-none text-base'
+              className={`flex-1 min-h-[2.8rem] max-h-[12rem] p-3 border-2 border-gray-300 rounded-xl  focus:outline-gray-500 transition-all duration-200 resize-none text-base`}
               value={inputText}
               onChange={
                 (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -304,11 +309,11 @@ const theme = currentCharacter
             />
             
             <button 
-              className='h-14 px-8 text-lg font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100 whitespace-nowrap'
+              className={`py-6 px-10 text-lg font-bold text-white ${theme.bgButton} rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100 whitespace-nowrap`}
               onClick={handleSynthesis}
               disabled={!inputText || isProcessing} 
             >
-              {isProcessing ? '⏳' : '📤'}
+              <Send />
             </button>
           </div>
         </div>
