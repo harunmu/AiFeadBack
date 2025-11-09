@@ -24,8 +24,8 @@ const SettingsPage = () => {
 
   // キャラクターごとの背景色設定
   const theme = currentCharacter
-    ? { bg: currentCharacter.bg, accent: currentCharacter.accent, color: currentCharacter.color }
-    : { bg: 'bg-gray-50', accent: 'bg-gray-200 border-gray-400', color: 'gray' };
+    ? { bg: currentCharacter.bg, accent: currentCharacter.accent, color: currentCharacter.color, bgButton: currentCharacter.bgButton, textColor:currentCharacter.textColor}
+    : { bg: 'bg-gray-50', accent: 'bg-gray-200 border-gray-400', color: 'gray', bgButton: 'gray', textColor: 'black'};
 
 
   useEffect(() => {
@@ -42,9 +42,9 @@ const SettingsPage = () => {
     setIsLoading(false);
   }, []);
 
-  const handleCharacterChange = (characterId: number) => {
-    setSelectedCharacterId(characterId);
-  };
+  // const handleCharacterChange = (characterId: number) => {
+  //   setSelectedCharacterId(characterId);
+  // };
 
   const playVoicePreview = (characterId: number, characterName: string) => {
     setIsPlaying(characterId);
@@ -137,8 +137,8 @@ const SettingsPage = () => {
               key={character.id}
               className={`relative cursor-pointer border-4 rounded-3xl p-6 transition-all duration-300 ease-in-out transform bg-white/90 backdrop-blur-sm
                 ${selectedCharacterId === character.id
-                  ? 'border-purple-200 scale-105'
-                  : 'border-gray-300 shadow-md hover:shadow-lg hover:border-purple-200'
+                  ? `border-${theme.color}-300 scale-105`
+                  : `border-gray-300 shadow-md hover:shadow-lg hover:border-${theme.color}-200`
                 }`}
                 onClick={() => setSelectedCharacterId(character.id)}
               >
@@ -178,7 +178,7 @@ const SettingsPage = () => {
 
                   {/* 選択チェックマーク */}
                   {selectedCharacterId === character.id && (
-                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center shadow-lg">
+                    <div className={`absolute -top-2 -right-2 w-8 h-8 ${theme.bgButton} rounded-full flex items-center justify-center shadow-lg`}>
                       <span className="text-white text-lg">✓</span>
                     </div>
                   )}
@@ -196,18 +196,18 @@ const SettingsPage = () => {
           className={`w-full mt-8 py-6 rounded-full font-bold text-xl transition-all duration-300 shadow-lg
             ${selectedCharacterId === userData.character_id
               ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-              : `bg-${theme.color}-400 text-white hover:shadow-xl hover:scale-102`
+              : `${theme.bgButton} text-white hover:shadow-xl hover:scale-102`
             }`}
         >
           {isSaving ? '保存中...' : selectedCharacterId === userData.character_id ? '現在のキャラクター' : '変更を保存'}
         </button>
         <button
-          onClick={() => router.push('/')}
-          className={`w-full mt-8 py-6 rounded-full font-bold text-xl transition-all duration-300 shadow-lg
-                     bg-white text-${theme.color}-400 hover:shadow-xl hover:scale-102`
+          onClick={() => router.push('/chat')}
+          className={`w-full mt-8 py-6 rounded-full font-extrabold text-xl transition-all duration-300 shadow-lg
+                     bg-white ${theme.textColor} hover:shadow-xl hover:scale-102`
                     }
         >
-          ホームに戻る
+          戻る
         </button>
       </div>
 

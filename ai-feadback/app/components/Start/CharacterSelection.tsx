@@ -44,13 +44,13 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect, onBac
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-200 to-lime-200 flex items-center justify-center p-4">
+    <div className="min-h-screen  flex items-center justify-center p-4">
       <div className="w-full max-w-6xl">
-        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-10 space-y-8 border-2 border-green-200">
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-10 space-y-8 ">
+        
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full mb-2 shadow-md">
-              {/* 枝豆アイコンに変更 */}
-              <span className="text-3xl">🫘</span>
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-2 shadow-md">
+              <span className="text-3xl">🍃</span>
             </div>
             <h2 className="text-3xl font-bold text-green-700">キャラクター選択</h2>
             <p className="text-gray-500 text-sm">お好きなキャラクターを選択してください</p>
@@ -71,7 +71,7 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect, onBac
                   {/* キャラクター画像（上部にフォーカス） */}
                   <div className="w-48 h-56 relative overflow-hidden">
                     <Image
-                      src={`/${character.name}.png`}
+                      src={`/img/${character.name}.png`}
                       alt={character.name}
                       width={400}
                       height={600}
@@ -92,13 +92,12 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect, onBac
                       playVoicePreview(character.id, character.name)
                     }}
                     disabled={isPlaying === character.id}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                    className={`flex items-center gap-2 p-5 rounded-full font-medium transition-all ${
                       isPlaying === character.id
-                        ? 'bg-green-500 text-white'
+                        ? 'bg-green-400 text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    <Volume2 className={`w-4 h-4 ${isPlaying === character.id ? 'animate-pulse' : ''}`} />
                     <PlayIcon />
                   </button>
 
@@ -117,7 +116,7 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect, onBac
             <button
               onClick={handleSelect}
               disabled={selectedCharacterID === null}
-              className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 ${
+              className={`w-full  px-8 py-4 rounded-full font-extrabold text-xl text-white transition-all duration-200 ${
                 selectedCharacterID !== null
                   ? 'bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
                   : 'bg-gray-300 cursor-not-allowed'
@@ -128,7 +127,8 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect, onBac
 
             <button
               onClick={onBack}
-              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-gradient-to-r from-lime-400 to-green-600 hover:from-lime-500 hover:to-green-700 shadow-md hover:shadow-lg transition-all duration-200"
+              className="w-full text-emerald-600 bg-white px-8 py-4 rounded-full font-extrabold text-xl shadow-lg hover:text-white hover:bg-emerald-600 hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
+            
             >
               ← 戻る
             </button>

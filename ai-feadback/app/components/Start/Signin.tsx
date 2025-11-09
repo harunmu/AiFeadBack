@@ -130,7 +130,7 @@ const SignInForm: React.FC = () => {
           disabled={!isFormValid}
           className={`w-full px-8 py-4 rounded-full font-extrabold text-xl transition-all duration-300 ${
             isFormValid
-              ? 'text-white bg-emerald-400 shadow-lg hover:bg-white hover:text-emerald-400 hover:shadow-xl hover:scale-[1.03]'
+              ? 'text-white bg-emerald-400 shadow-lg hover:bg-emerald-500  hover:shadow-xl hover:scale-[1.03]'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed'
           }`}
         >

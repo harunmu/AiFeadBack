@@ -89,7 +89,7 @@ const Login = () => {
 
         <button
           onClick={handleLogin}
-          className="w-full text-emerald-400 bg-white px-8 py-4 rounded-full font-extrabold text-xl shadow-lg  hover:text-white hover:bg-emerald-400 hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
+          className="w-full text-white bg-emerald-400 px-8 py-4 rounded-full font-extrabold text-xl shadow-lg   hover:bg-emerald-500 hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
 
         >
           ログイン →
