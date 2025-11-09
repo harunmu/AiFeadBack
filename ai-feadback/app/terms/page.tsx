@@ -1,17 +1,54 @@
 "use client"
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
+import { UserData } from '@/config/type'
+import { CHARACTER_OPTIONS } from '@/app/config/voiceSettings'
 
 const TermsPage = () => {
   const router = useRouter()
+  const [userData, setUserData] = useState<UserData | null>(null)
+
+  useEffect(() => {
+    const userJson = localStorage.getItem("user")
+    if (userJson) {
+      try {
+        const data = JSON.parse(userJson) as UserData
+        setUserData(data)
+      } catch (e) {
+        console.error("Failed to parse user data:", e)
+      }
+    }
+  }, [])
+
+  // キャラクター情報を取得
+  const currentCharacter = userData
+    ? CHARACTER_OPTIONS.find(char => char.id === userData.character_id)
+    : null
+
+  // キャラクターごとの背景色設定
+  const theme = currentCharacter
+    ? { bg: currentCharacter.bg, accent: currentCharacter.accent, color: currentCharacter.color }
+    : { bg: 'bg-gray-50', accent: 'bg-gray-200 border-gray-400', color: 'gray' }
 
   return (
-<div className="min-h-screen bg-gray-50 p-4">
-  <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-    <h2 className="text-3xl font-bold mb-6 text-gray-800">利用規約 / クレジット</h2>
+<div className={`min-h-screen ${theme.bg} p-4`}>
+  <div className="max-w-4xl mx-auto">
+    {/* ヘッダー */}
+    <div className="flex items-center mb-6 bg-white/90 backdrop-blur-sm rounded-xl shadow-sm p-4">
+      <button
+        onClick={() => router.back()}
+        className="p-2 hover:bg-gray-100 rounded-full transition-colors mr-3"
+        aria-label="戻る"
+      >
+        <ArrowLeft className="w-6 h-6 text-gray-700" />
+      </button>
+      <h1 className="text-3xl font-bold text-gray-800">利用規約 / クレジット</h1>
+    </div>
 
+    {/* コンテンツカード */}
+    <div className="p-6 bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-white">
     <div className="space-y-6">
 
       {/* 1. 音声生成技術クレジット */}
@@ -131,6 +168,7 @@ const TermsPage = () => {
         </ul>
       </section>
 
+    </div>
     </div>
   </div>
 </div>
