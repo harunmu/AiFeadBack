@@ -1,0 +1,156 @@
+/* -------------------------------------- */
+/* 1. カレンダーのルート要素を調整 (ルート要素) */
+/* -------------------------------------- */
+
+/* CSS変数のデフォルト値を設定 */
+.calendar-container {
+  --calendar-primary: #9333ea;
+  --calendar-secondary: #ec4899;
+  --calendar-light: rgba(147, 51, 234, 0.2);
+  /* --calendar-border: #9333ea; */
+}
+
+.react-datepicker {
+  width: 100%;
+  border: none !important;
+  font-size: 1.2rem;
+  border-radius: 24px !important;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+  font-family: "Hiragino Maru Gothic Pro", "Meiryo UI", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  font-weight: bold;
+}
+
+.react-datepicker__month-container {
+    width: 100%;
+}
+
+/* -------------------------------------- */
+/* 2. 月のヘッダー部分のパディングとフォントを調整 */
+/* -------------------------------------- */
+.react-datepicker__header {
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  background: linear-gradient(135deg, var(--calendar-light) 0%, var(--calendar-light) 100%) !important;
+  border-bottom: 2px solid var(--calendar-primary) !important;
+  border-radius: 20px 20px 0 0 !important;
+}
+
+/* 月と年の表示部分のフォントサイズ調整 */
+.react-datepicker__current-month {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 800;
+  /* color: var(--calendar-primary); */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* -------------------------------------- */
+/* 3. 日付のセル（タップターゲット）のサイズ調整 */
+/* -------------------------------------- */
+
+/* 日付の曜日名、日付セル、時間名のサイズを調整 */
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  width: 13%;
+  line-height: 3.5rem;
+  margin: 0.15rem;
+  border-radius: 50% !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+/* 曜日を太字に変更 */
+.react-datepicker__day-name {
+  font-weight: 800;
+  color: var(--calendar-primary);
+  font-size: 1rem;
+}
+
+/* 日付セルのホバー効果 */
+.react-datepicker__day:hover {
+  background: linear-gradient(135deg, var(--calendar-primary) 0%, var(--calendar-secondary) 100%) !important;
+  color: white !important;
+  transform: scale(1.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* 対象月外の日付を薄く表示 */
+.react-datepicker__day--outside-month {
+    opacity: 0.3;
+}
+
+/* 選択された日付のスタイルも忘れずに調整 */
+.react-datepicker__day--selected {
+  background: linear-gradient(135deg, var(--calendar-primary) 0%, var(--calendar-secondary) 100%) !important;
+  color: white !important;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+}
+
+.react-datepicker__day--selected.react-datepicker__day:hover {
+  background: linear-gradient(135deg, var(--calendar-secondary) 0%, var(--calendar-primary) 100%) !important;
+  color: white !important;
+  transform: scale(1.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+
+
+/* -------------------------------------- */
+/* 4. 月表示全体の調整 (週間のコンテナ) */
+/* -------------------------------------- */
+.react-datepicker__month {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+}
+
+/* 月送りの矢印ボタン全体を対象 */
+.react-datepicker__navigation {
+  top: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--calendar-primary) 0%, var(--calendar-secondary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* transition: all 0.2s ease; */
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); */
+}
+
+.react-datepicker__navigation:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.react-datepicker__navigation-icon::before {
+  border-color: white !important;
+  border-width: 2px 2px 0 0 !important;
+  width: 8px;
+  height: 8px;
+  top: 50%;
+}
+
+/* 左矢印（前の月） */
+.react-datepicker__navigation--previous {
+    left: 1.5rem;
+    top: 6%
+}
+
+.react-datepicker__navigation--previous .react-datepicker__navigation-icon::before {
+  transform: translateY(-50%) rotate(-135deg); /* 左向き矢印 */
+}
+
+/* 右矢印（次の月） */
+.react-datepicker__navigation--next {
+    right: 1.5rem;
+    top: 6%
+}
+
+.react-datepicker__navigation--next .react-datepicker__navigation-icon::before {
+  transform: translateY(-50%) rotate(45deg); /* 右向き矢印 */
+}
